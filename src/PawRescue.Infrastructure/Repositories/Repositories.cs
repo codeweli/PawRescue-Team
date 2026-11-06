@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PawRescue.Application.DTOs;
 using PawRescue.Application.Interfaces;
 using PawRescue.Domain.Entities;
@@ -85,11 +85,14 @@ public class ReportRepository : Repository<AnimalReport>, IReportRepository
             .Where(r => r.Location.Latitude >= minLat && r.Location.Latitude <= maxLat
                      && r.Location.Longitude >= minLon && r.Location.Longitude <= maxLon);
 
-        // TODO(MEMBER 3): Apply the map filters here (right now every report in the box is returned).
-        //   - minSeverity: keep reports whose Severity is >= minSeverity
-        //   - status:      keep reports whose Status == status
-        //   - otherwise, if openOnly: hide Rescued and Closed reports (use the ClosedStates array above)
-        //   Use q = q.Where(...) for each one.
+        // Apply map filters
+        if (minSeverity is not null)
+            q = q.Where(r => r.Severity >= minSeverity);
+
+        if (status is not null)
+            q = q.Where(r => r.Status == status);
+        else if (openOnly)
+            q = q.Where(r => !ClosedStates.Contains(r.Status));
 
         return await q.OrderByDescending(r => r.PriorityScore).Take(limit).ToListAsync(ct);
     }
@@ -105,8 +108,15 @@ public class ReportRepository : Repository<AnimalReport>, IReportRepository
                           || EF.Functions.ILike(r.Description, pattern)
                           || (r.Location.Address != null && EF.Functions.ILike(r.Location.Address, pattern)));
         }
-        // TODO(MEMBER 3): Apply query.AnimalType, query.Severity and query.Status filters
-        //   (each only when it is not null). Only the keyword filter works right now.
+        // Apply search filters
+        if (query.AnimalType is not null)
+            q = q.Where(r => r.AnimalType == query.AnimalType);
+
+        if (query.Severity is not null)
+            q = q.Where(r => r.Severity == query.Severity);
+
+        if (query.Status is not null)
+            q = q.Where(r => r.Status == query.Status);
 
         var total = await q.CountAsync(ct);
         var items = await q.OrderByDescending(r => r.CreatedAt)
