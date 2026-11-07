@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PawRescue.Application.DTOs;
 using PawRescue.Application.Interfaces;
 using PawRescue.Domain.Entities;
@@ -191,21 +191,29 @@ public class NotificationRepository : Repository<Notification>, INotificationRep
 {
     public NotificationRepository(AppDbContext db) : base(db) { }
 
-    // TODO(MEMBER 2): Query Set.AsNoTracking() where n.UserId == userId
-    //   (+ !n.IsRead when unreadOnly), CountAsync for the total,
-    //   then OrderByDescending(CreatedAt).Skip((page-1)*pageSize).Take(pageSize).ToListAsync(ct).
-    //   Hint: copy the pattern from AuditLogRepository / UserRepository.SearchAsync.
-    public Task<(IReadOnlyList<Notification> Items, int Total)> GetForUserAsync(Guid userId, bool unreadOnly, int page, int pageSize, CancellationToken ct = default)
-        => throw new NotImplementedException("TODO(MEMBER 2)");
+    public async Task<(IReadOnlyList<Notification> Items, int Total)> GetForUserAsync(Guid userId, bool unreadOnly, int page, int pageSize, CancellationToken ct = default)
+    {
+        var q = Set.AsNoTracking().Where(n => n.UserId == userId);
+        if (unreadOnly)
+            q = q.Where(n => !n.IsRead);
 
-    // TODO(MEMBER 2): Set.CountAsync(n => n.UserId == userId && !n.IsRead, ct)
+        var total = await q.CountAsync(ct);
+        var items = await q.OrderByDescending(n => n.CreatedAt)
+                           .Skip((page - 1) * pageSize)
+                           .Take(pageSize)
+                           .ToListAsync(ct);
+        return (items, total);
+    }
+
     public Task<int> CountUnreadAsync(Guid userId, CancellationToken ct = default)
-        => throw new NotImplementedException("TODO(MEMBER 2)");
+        => Set.CountAsync(n => n.UserId == userId && !n.IsRead, ct);
 
-    // TODO(MEMBER 2): Load the user's unread notifications (tracked, no AsNoTracking)
-    //   and call n.MarkAsRead() on each. The service saves afterwards.
-    public Task MarkAllAsReadAsync(Guid userId, CancellationToken ct = default)
-        => throw new NotImplementedException("TODO(MEMBER 2)");
+    public async Task MarkAllAsReadAsync(Guid userId, CancellationToken ct = default)
+    {
+        var unread = await Set.Where(n => n.UserId == userId && !n.IsRead).ToListAsync(ct);
+        foreach (var n in unread)
+            n.MarkAsRead();
+    }
 }
 
 public class RefreshTokenRepository : Repository<RefreshToken>, IRefreshTokenRepository

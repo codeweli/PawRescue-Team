@@ -38,3 +38,8 @@ Password-reset codes are printed in the API console (email sending is a dev stub
 2. Start the API, then run `PawRescue.Mobile` on the Android emulator. It calls `http://10.0.2.2:5080` (the host PC).
 3. On a real phone, change `ApiConfig.BaseUrl` in `Services/Infrastructure.cs` to your PC's LAN IP and set `Storage:PublicBaseUrl` in the API to the same IP so photos load.
 
+### HOW TO RUN ANDROID EMULATOR
+Window 1: & "C:\Program Files (x86)\Android\android-sdk\emulator\emulator.exe" -avd PawPhone
+Window 2: cd into PawRescue.Api → dotnet run
+Window 3: cd into PawRescue.Mobile → dotnet build -t:Run -f net10.0-android
+

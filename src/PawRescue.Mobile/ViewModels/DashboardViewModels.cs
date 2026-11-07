@@ -85,25 +85,36 @@ public partial class NotificationsViewModel : BaseViewModel
 
     public override Task OnAppearingAsync() => LoadAsync();
 
-    // TODO(MEMBER 2): Load the notifications list.
-    //   Inside RunAsync(..., showBusy: !IsRefreshing):
-    //     var page = await _notifications.GetAsync();
-    //     Items.Clear(); add each page.Items; IsEmpty = Items.Count == 0;
-    //   After RunAsync set IsRefreshing = false (stops the pull-to-refresh spinner).
-    //   See VolunteerDashboardViewModel.LoadAsync for the same pattern.
     [RelayCommand]
-    private Task LoadAsync()
+    private async Task LoadAsync()
     {
-        IsEmpty = true;
-        IsRefreshing = false;
-        return Task.CompletedTask;
+        try
+        {
+            await RunAsync(async () =>
+            {
+                var page = await _notifications.GetAsync();
+                Items.Clear();
+                foreach (var item in page.Items)
+                    Items.Add(item);
+                IsEmpty = Items.Count == 0;
+            }, showBusy: !IsRefreshing);
+        }
+        finally
+        {
+            IsRefreshing = false;
+        }
     }
 
-    // TODO(MEMBER 2): Call _notifications.MarkAllAsReadAsync(), then replace every item
-    //   with a copy where IsRead = true (records: n with { IsRead = true }) so the dots disappear.
     [RelayCommand]
-    private Task MarkAllReadAsync()
-        => Dialogs.AlertAsync("Not built yet", "Notifications are assigned to Member 2.");
+    private Task MarkAllReadAsync() => RunAsync(async () =>
+    {
+        await _notifications.MarkAllAsReadAsync();
+        for (var i = 0; i < Items.Count; i++)
+        {
+            if (!Items[i].IsRead)
+                Items[i] = Items[i] with { IsRead = true };
+        }
+    });
 
     partial void OnSelectedItemChanged(NotificationDto? value)
     {
@@ -112,11 +123,27 @@ public partial class NotificationsViewModel : BaseViewModel
         _ = OpenAsync(value);
     }
 
-    // TODO(MEMBER 2): When a notification is tapped:
-    //   1. If it's unread, call _notifications.MarkAsReadAsync(n.Id) and replace it in Items with n with { IsRead = true }.
-    //   2. If n.ReportId has a value, open it:
-    //      await Shell.Current.GoToAsync("reportdetails", new Dictionary<string, object> { ["id"] = reportId });
-    private Task OpenAsync(NotificationDto n) => Task.CompletedTask;
+    private async Task OpenAsync(NotificationDto n)
+    {
+        if (!n.IsRead)
+        {
+            for (var i = 0; i < Items.Count; i++)
+            {
+                if (Items[i].Id == n.Id)
+                {
+                    Items[i] = Items[i] with { IsRead = true };
+                    break;
+                }
+            }
+
+            await RunAsync(() => _notifications.MarkAsReadAsync(n.Id), showBusy: false);
+        }
+
+        if (n.ReportId.HasValue)
+        {
+            await Shell.Current.GoToAsync("reportdetails", new Dictionary<string, object> { ["id"] = n.ReportId.Value });
+        }
+    }
 }
 
 public partial class ProfileViewModel : BaseViewModel
