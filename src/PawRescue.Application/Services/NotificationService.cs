@@ -34,32 +34,34 @@ public class NotificationService : INotificationService
 
     private Guid CurrentUserId => _currentUser.UserId ?? throw new UnauthorizedException("Not logged in.");
 
-    // ============================================================
-    // TODO(MEMBER 2): Return the logged-in user's notifications, newest first, paged.
-    // ------------------------------------------------------------
-    // 1. Clamp the input: page = Math.Max(1, page); pageSize = Math.Clamp(pageSize, 1, 100);
-    // 2. var (items, total) = await _notifications.GetForUserAsync(CurrentUserId, unreadOnly, page, pageSize, ct);
-    //    (you also need to write GetForUserAsync in NotificationRepository)
-    // 3. Map with items.Select(n => n.ToDto()) and return new PagedResult<NotificationDto>(...).
-    // Hint: AdminService.GetUsersAsync does the same paging pattern.
-    // ============================================================
-    public Task<PagedResult<NotificationDto>> GetMyNotificationsAsync(bool unreadOnly, int page, int pageSize, CancellationToken ct = default)
-        => throw new FeatureNotImplementedException("Notification list (Member 2)");
+    public async Task<PagedResult<NotificationDto>> GetMyNotificationsAsync(bool unreadOnly, int page, int pageSize, CancellationToken ct = default)
+    {
+        page = Math.Max(1, page);
+        pageSize = Math.Clamp(pageSize, 1, 100);
+        var (items, total) = await _notifications.GetForUserAsync(CurrentUserId, unreadOnly, page, pageSize, ct);
+        return new PagedResult<NotificationDto>(items.Select(n => n.ToDto()).ToList(), page, pageSize, total);
+    }
 
-    // TODO(MEMBER 2): return _notifications.CountUnreadAsync(CurrentUserId, ct);
-    // (Returns 0 for now so the Home screen bell still works.)
-    public Task<int> GetUnreadCountAsync(CancellationToken ct = default) => Task.FromResult(0);
+    public Task<int> GetUnreadCountAsync(CancellationToken ct = default)
+        => _notifications.CountUnreadAsync(CurrentUserId, ct);
 
-    // TODO(MEMBER 2): Mark ONE notification as read.
-    //   - Load it with _notifications.GetByIdAsync(id, ct) → throw NotFoundException if null.
-    //   - If n.UserId != CurrentUserId → throw new ForbiddenException(); (users can't touch others' notifications)
-    //   - n.MarkAsRead(); then await _uow.SaveChangesAsync(ct);
-    public Task MarkAsReadAsync(Guid id, CancellationToken ct = default)
-        => throw new FeatureNotImplementedException("Mark notification as read (Member 2)");
+    public async Task MarkAsReadAsync(Guid id, CancellationToken ct = default)
+    {
+        var n = await _notifications.GetByIdAsync(id, ct)
+                ?? throw new NotFoundException("Notification", id);
 
-    // TODO(MEMBER 2): await _notifications.MarkAllAsReadAsync(CurrentUserId, ct); then save.
-    public Task MarkAllAsReadAsync(CancellationToken ct = default)
-        => throw new FeatureNotImplementedException("Mark all notifications as read (Member 2)");
+        if (n.UserId != CurrentUserId)
+            throw new ForbiddenException();
+
+        n.MarkAsRead();
+        await _uow.SaveChangesAsync(ct);
+    }
+
+    public async Task MarkAllAsReadAsync(CancellationToken ct = default)
+    {
+        await _notifications.MarkAllAsReadAsync(CurrentUserId, ct);
+        await _uow.SaveChangesAsync(ct);
+    }
 
     /// <summary>POLYMORPHISM: accepts any NotificationTemplate subclass.</summary>
     public async Task NotifyAsync(Guid userId, NotificationTemplate template, CancellationToken ct = default)
