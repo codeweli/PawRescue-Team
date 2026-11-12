@@ -65,6 +65,25 @@ public class AnimalReportTests
         => Assert.Throws<DomainException>(() => new Location(lat, lng));
 }
 
+public class PasswordResetTokenTests
+{
+    [Fact]
+    public void Reset_token_rejects_wrong_hash()
+    {
+        var user = new User("Test User", "test@example.com", "old-hash", 1);
+        user.SetPasswordResetToken("expected-hash", DateTime.UtcNow.AddMinutes(15));
+        Assert.False(user.IsPasswordResetTokenValid("wrong-hash"));
+    }
+
+    [Fact]
+    public void Reset_token_rejects_after_expiry()
+    {
+        var user = new User("Test User", "test@example.com", "old-hash", 1);
+        user.SetPasswordResetToken("expected-hash", DateTime.UtcNow.AddMinutes(-1));
+        Assert.False(user.IsPasswordResetTokenValid("expected-hash"));
+    }
+}
+
 public class PriorityStrategyTests
 {
     [Fact]

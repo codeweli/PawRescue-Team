@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using System.Security.Cryptography;
 using PawRescue.Application.Common;
 using PawRescue.Application.DTOs;
 using PawRescue.Application.Interfaces;
@@ -131,8 +132,17 @@ public class AuthService : IAuthService
     // 6. Audit it: await _audit.LogAsync("PASSWORD_RESET_REQUESTED", nameof(User), user.Id.ToString(), null, ct);
     // Look at LoginAsync above for the same style.
     // ============================================================
-    public Task ForgotPasswordAsync(string email, CancellationToken ct = default)
-        => throw new FeatureNotImplementedException("Forgot password (Member 1)");
+    public async Task ForgotPasswordAsync(string email, CancellationToken ct = default)
+    {
+        var user = await _users.GetByEmailAsync(email.Trim(), ct);
+        if (user is null) return;
+        var code = RandomNumberGenerator.GetInt32(100000, 1000000).ToString();
+        user.SetPasswordResetToken(_tokens.HashToken(code), DateTime.UtcNow.AddMinutes(15));
+        await _uow.SaveChangesAsync(ct);
+        await _email.SendAsync(user.Email, "Paw Rescue password reset",
+            $"Your password reset code is {code}. It expires in 15 minutes.", ct);
+        await _audit.LogAsync("PASSWORD_RESET_REQUESTED", nameof(User), user.Id.ToString(), null, ct);
+    }
 
     // ============================================================
     // TODO(MEMBER 1): Reset password — check the code and set the new password
@@ -144,8 +154,16 @@ public class AuthService : IAuthService
     // 4. Log out every device: await _refreshTokens.RevokeAllForUserAsync(user.Id, ct);
     // 5. Save, then audit "PASSWORD_RESET".
     // ============================================================
-    public Task ResetPasswordAsync(ResetPasswordRequest request, CancellationToken ct = default)
-        => throw new FeatureNotImplementedException("Reset password (Member 1)");
+    public async Task ResetPasswordAsync(ResetPasswordRequest request, CancellationToken ct = default)
+    {
+        var user = await _users.GetByEmailAsync(request.Email.Trim(), ct);
+        if (user is null || !user.IsPasswordResetTokenValid(_tokens.HashToken(request.Token.Trim())))
+            throw new ValidationException("The reset code is invalid or has expired.");
+        user.ChangePassword(_hasher.Hash(request.NewPassword));
+        await _refreshTokens.RevokeAllForUserAsync(user.Id, ct);
+        await _uow.SaveChangesAsync(ct);
+        await _audit.LogAsync("PASSWORD_RESET", nameof(User), user.Id.ToString(), null, ct);
+    }
 
     private async Task<AuthResponse> IssueTokensAsync(User user, string roleName, CancellationToken ct)
     {

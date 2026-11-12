@@ -128,12 +128,37 @@ public partial class ForgotPasswordViewModel : BaseViewModel
     //     and tell the user to check their email.
     [RelayCommand]
     private Task SendCodeAsync()
-        => Dialogs.AlertAsync("Not built yet", "Forgot password is assigned to Member 1.");
+        => RunAsync(async () =>
+        {
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                await Dialogs.AlertAsync("Missing info", "Please enter your email address.");
+                return;
+            }
+            await _auth.ForgotPasswordAsync(Email.Trim());
+            IsCodeSent = true;
+            await Dialogs.AlertAsync("Code sent", "Check your email for the 6-digit reset code.");
+        });
 
     // TODO(MEMBER 1): Call _auth.ResetPasswordAsync(Email, Code, NewPassword) inside RunAsync(...).
     //   - Code must be 6 digits and NewPassword at least 8 characters.
     //   - On success show "Password changed" and go back: await Shell.Current.GoToAsync("..");
     [RelayCommand]
     private Task ResetAsync()
-        => Dialogs.AlertAsync("Not built yet", "Reset password is assigned to Member 1.");
+        => RunAsync(async () =>
+        {
+            if (!Regex.IsMatch(Code ?? string.Empty, "^\\d{6}$"))
+            {
+                await Dialogs.AlertAsync("Invalid code", "Enter the 6-digit code from your email.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(NewPassword) || NewPassword.Length < 8)
+            {
+                await Dialogs.AlertAsync("Invalid password", "Your new password must be at least 8 characters.");
+                return;
+            }
+            await _auth.ResetPasswordAsync(Email.Trim(), Code.Trim(), NewPassword);
+            await Dialogs.AlertAsync("Password changed", "Your password has been reset. Please log in.");
+            await Shell.Current.GoToAsync("..");
+        });
 }
