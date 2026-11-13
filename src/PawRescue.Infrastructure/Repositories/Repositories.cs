@@ -234,9 +234,16 @@ public class AuditLogRepository : Repository<AuditLog>, IAuditLogRepository
 {
     public AuditLogRepository(AppDbContext db) : base(db) { }
 
-    // TODO(MEMBER 4): Count all logs, then return the newest page:
-    //   Set.Include(l => l.User).AsNoTracking().OrderByDescending(l => l.CreatedAt)
-    //      .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(ct)
-    public Task<(IReadOnlyList<AuditLog> Items, int Total)> GetRecentAsync(int page, int pageSize, CancellationToken ct = default)
-        => throw new NotImplementedException("TODO(MEMBER 4)");
+    /// <summary>Activity monitoring: newest actions first, one page at a time, with the user's name.</summary>
+    public async Task<(IReadOnlyList<AuditLog> Items, int Total)> GetRecentAsync(int page, int pageSize, CancellationToken ct = default)
+    {
+        var total = await Set.CountAsync(ct);
+        var items = await Set.Include(l => l.User)
+                             .AsNoTracking()
+                             .OrderByDescending(l => l.CreatedAt)
+                             .Skip((page - 1) * pageSize)
+                             .Take(pageSize)
+                             .ToListAsync(ct);
+        return (items, total);
+    }
 }

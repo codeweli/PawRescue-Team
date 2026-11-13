@@ -53,7 +53,7 @@
                             <DataTemplate x:DataType="vm:LegendItem">
                                 <HorizontalStackLayout Spacing="8">
                                     <BoxView Color="{Binding Color}" WidthRequest="10" HeightRequest="10" CornerRadius="5" VerticalOptions="Center" />
-                                    <Label Text="{Binding Label}" FontSize="11" FontAttributes="Bold" VerticalOptions="Center" />
+                                    <Label Text="{Binding Label}" FontSize="11" FontFamily="NunitoBold" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
@@ -76,7 +76,7 @@
                 <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 14" Padding="12,8"
                         HorizontalOptions="Center" VerticalOptions="End" Margin="12,12,12,24"
                         IsVisible="{Binding HasSelection, Converter={StaticResource InvertedBool}}">
-                    <Label Text="{Binding ResultText}" FontSize="12" FontAttributes="Bold" />
+                    <Label Text="{Binding ResultText}" FontSize="12" FontFamily="NunitoBold" />
                 </Border>
 
                 <!-- Selected report preview card (bottom) -->
@@ -96,7 +96,7 @@
                                 <Label Text="{Binding SelectedPin.Subtitle}" Style="{StaticResource Caption}" MaxLines="1" LineBreakMode="TailTruncation" />
                                 <HorizontalStackLayout Spacing="8">
                                     <BoxView Color="{Binding SelectedPin.NeedColor}" WidthRequest="9" HeightRequest="9" CornerRadius="4.5" VerticalOptions="Center" />
-                                    <Label Text="{Binding SelectedPin.NeedText}" FontAttributes="Bold" FontSize="14" VerticalOptions="Center" />
+                                    <Label Text="{Binding SelectedPin.NeedText}" FontFamily="NunitoBold" FontSize="14" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                                 <Label Text="{Binding SelectedPin.ConditionText}" Style="{StaticResource Caption}" />
                             </VerticalStackLayout>
@@ -110,7 +110,7 @@
                             <!-- Route summary, e.g. "4.2 km · about 11 min drive" -->
                             <HorizontalStackLayout Spacing="8" IsVisible="{Binding RouteText, Converter={StaticResource IsNotNull}}">
                                 <ActivityIndicator IsRunning="{Binding IsRouting}" IsVisible="{Binding IsRouting}" WidthRequest="16" HeightRequest="16" />
-                                <Label Text="{Binding RouteText}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource Primary}" VerticalOptions="Center" />
+                                <Label Text="{Binding RouteText}" FontSize="13" FontFamily="NunitoBold" TextColor="{StaticResource Primary}" VerticalOptions="Center" />
                             </HorizontalStackLayout>
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
                                 <!-- Before a route: "Directions" draws it in the app. After: "Navigate" opens Google Maps turn-by-turn. -->

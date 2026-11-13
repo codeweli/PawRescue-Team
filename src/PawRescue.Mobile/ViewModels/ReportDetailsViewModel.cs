@@ -56,6 +56,18 @@ public partial class ReportDetailsViewModel : BaseViewModel, IQueryAttributable
     [ObservableProperty] private string nextActionText = string.Empty;
     [ObservableProperty] private string reportedAgo = string.Empty;
 
+    // ----- Display helpers for the redesigned screen -----
+    [ObservableProperty] private string subtitle = string.Empty;      // "Cat · reported 2 h ago"
+    [ObservableProperty] private string needText = string.Empty;      // "Medical Treatment"
+    [ObservableProperty] private Color needColor = Colors.Gray;
+    [ObservableProperty] private string urgencyText = string.Empty;   // "High urgency"
+    [ObservableProperty] private string statusText = string.Empty;    // "Rescue in progress"
+    [ObservableProperty] private bool hasPhotos;
+    [ObservableProperty] private bool hasRescuer;
+
+    /// <summary>The friendly "Accept this rescue?" sheet (instead of the plain Android dialog).</summary>
+    [ObservableProperty] private bool isAcceptSheetVisible;
+
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (query.TryGetValue("id", out var value) && value is Guid id)
@@ -85,6 +97,14 @@ public partial class ReportDetailsViewModel : BaseViewModel, IQueryAttributable
         }
 
         ReportedAgo = Ago(r.CreatedAt);
+        Subtitle = $"{r.AnimalType} · reported {ReportedAgo}";
+        var need = Needs.From(r.Condition, r.Status);
+        NeedText = Needs.CardLabel(r.Condition, r.Status);
+        NeedColor = Needs.ColorOf(need);
+        UrgencyText = $"{r.Severity} urgency";
+        StatusText = Steps.FirstOrDefault(s => s.Status == r.Status).Label ?? r.Status.ToString();
+        HasPhotos = r.Images.Count > 0;
+        HasRescuer = r.ActiveAssignment is not null;
         ComputePermissions(r);
     }
 
@@ -118,22 +138,63 @@ public partial class ReportDetailsViewModel : BaseViewModel, IQueryAttributable
         _ => null
     };
 
+    /// <summary>"Accept Rescue" button → shows the confirmation sheet.</summary>
     [RelayCommand]
-    private Task AcceptAsync() => RunAsync(async () =>
+    private void Accept() => IsAcceptSheetVisible = true;
+
+    [RelayCommand]
+    private void CancelAccept() => IsAcceptSheetVisible = false;
+
+    /// <summary>"Yes, I'll help" on the sheet → accept the rescue.</summary>
+    [RelayCommand]
+    private Task ConfirmAcceptAsync() => RunAsync(async () =>
     {
-        if (!await Dialogs.ConfirmAsync("Accept rescue?", "The reporter will be notified that you're on the way.", "Accept")) return;
+        IsAcceptSheetVisible = false;
         await _rescues.AcceptAsync(_id);
         await LoadCoreAsync();
+        await Dialogs.AlertAsync("Thank you! 🐾", $"You're now the rescuer for {Report?.Title}. The reporter has been notified.");
     });
 
+    // ----- "Start rescue / Mark as rescued / Close case" sheet -----
+    [ObservableProperty] private bool isStatusSheetVisible;
+    [ObservableProperty] private string statusNote = string.Empty;
+    [ObservableProperty] private string statusSheetHint = string.Empty;
+    public ObservableCollection<string> QuickNotes { get; } = new();
+
+    /// <summary>Main volunteer button → opens the update sheet with ready-made notes for the next step.</summary>
     [RelayCommand]
-    private Task AdvanceStatusAsync() => RunAsync(async () =>
+    private void AdvanceStatus()
     {
         if (Report is null || NextStatus(Report.Status) is not { } next) return;
-        var note = await Dialogs.PromptAsync(NextActionText, "Add a note for the reporter (optional)", "e.g. Brought to the vet");
-        if (note is null) return; // cancelled
 
-        await _rescues.UpdateStatusAsync(_id, next, note);
+        StatusNote = string.Empty;
+        QuickNotes.Clear();
+        var (hint, notes) = next switch
+        {
+            ReportStatus.InProgress => ("Tell the reporter you're starting the rescue.",
+                                        new[] { "On my way 🚗", "Arrived at the location", "Bringing food and water" }),
+            ReportStatus.Rescued => ("Great work! Let the reporter know the animal is safe.",
+                                     new[] { "Brought to the vet 🏥", "Safe with a foster home 🏠", "Back with its owner" }),
+            _ => ("Close this case when nothing more is needed.",
+                  new[] { "Adopted 💛", "Released healthy", "Duplicate report" })
+        };
+        StatusSheetHint = hint;
+        foreach (var n in notes) QuickNotes.Add(n);
+        IsStatusSheetVisible = true;
+    }
+
+    [RelayCommand]
+    private void PickQuickNote(string note) => StatusNote = note;
+
+    [RelayCommand]
+    private void CancelStatus() => IsStatusSheetVisible = false;
+
+    [RelayCommand]
+    private Task ConfirmStatusAsync() => RunAsync(async () =>
+    {
+        if (Report is null || NextStatus(Report.Status) is not { } next) return;
+        IsStatusSheetVisible = false;
+        await _rescues.UpdateStatusAsync(_id, next, string.IsNullOrWhiteSpace(StatusNote) ? null : StatusNote.Trim());
         await LoadCoreAsync();
     });
 
@@ -191,25 +252,6 @@ public partial class ReportDetailsViewModel : BaseViewModel, IQueryAttributable
         catch
         {
             await Dialogs.AlertAsync("Can't open maps", "No maps app or browser could open the directions.");
-        }
-    }
-
-    /// <summary>FUTURE FEATURE — the API returns 501 until the AI model is integrated.</summary>
-    [RelayCommand]
-    private async Task AnalyzeWithAiAsync()
-    {
-        try
-        {
-            var result = await _reports.AnalyzeHealthAsync(_id);
-            await Dialogs.AlertAsync("AI health check", $"{result.PredictedCondition} ({result.Confidence:P0})");
-        }
-        catch (ApiException ex) when ((int)ex.StatusCode == 501)
-        {
-            await Dialogs.AlertAsync("Coming soon 🤖", "AI health detection from photos is planned for the next version of Paw Rescue.");
-        }
-        catch (ApiException ex)
-        {
-            await Dialogs.AlertAsync("Oops", ex.Message);
         }
     }
 

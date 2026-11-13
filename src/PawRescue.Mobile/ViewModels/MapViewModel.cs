@@ -314,16 +314,28 @@ public partial class MapViewModel : BaseViewModel
         ResultText = _loaded.Count == 0 ? "No reports in this area" : $"{_loaded.Count} report(s) in view";
     }
 
-    // TODO(MEMBER 3): Turn the picker text into a severity:
-    //   "Medium+" → SeverityLevel.Medium, "High+" → High, "Critical" → Critical, anything else → null.
-    private SeverityLevel? MinSeverity() => null;
+    /// <summary>Urgency picker text → minimum severity sent to the API (null = no filter).</summary>
+    private SeverityLevel? MinSeverity() => SelectedSeverityFilter switch
+    {
+        "Medium+" => SeverityLevel.Medium,
+        "High+" => SeverityLevel.High,
+        "Critical" => SeverityLevel.Critical,
+        _ => null
+    };
 
     private bool MatchesSeverity(ReportSummaryDto r) => MinSeverity() is not { } min || r.Severity >= min;
 
-    // TODO(MEMBER 3): Turn the picker text into a status:
-    //   "Reported" → ReportStatus.Reported, "In Progress" → InProgress, "Rescued" → Rescued, else → null.
-    //   ("Open" and "All" stay null — LoadAsync sends openOnly = true for "Open".)
-    private ReportStatus? StatusFilter() => null;
+    /// <summary>
+    /// Status picker text → exact status sent to the API.
+    /// "Open" and "All" return null: LoadAsync sends openOnly = true for "Open" (hides Rescued/Closed).
+    /// </summary>
+    private ReportStatus? StatusFilter() => SelectedStatusFilter switch
+    {
+        "Reported" => ReportStatus.Reported,
+        "In Progress" => ReportStatus.InProgress,
+        "Rescued" => ReportStatus.Rescued,
+        _ => null
+    };
 }
 
 public record LegendItem(string Label, Color Color);

@@ -14,7 +14,15 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .UseSkiaSharp(); // required by Mapsui (OpenStreetMap). Without it the Map tab crashes.
+            .UseSkiaSharp() // required by Mapsui (OpenStreetMap). Without it the Map tab crashes.
+            .ConfigureFonts(fonts =>
+            {
+                // Nunito — soft, rounded and easy to read. Used for all body text, buttons and inputs.
+                fonts.AddFont("Nunito-Regular.ttf", "NunitoRegular");
+                fonts.AddFont("Nunito-SemiBold.ttf", "NunitoSemiBold");
+                fonts.AddFont("Nunito-Bold.ttf", "NunitoBold");
+                fonts.AddFont("Nunito-ExtraBold.ttf", "NunitoExtraBold");
+            });
 
 #if DEBUG
         builder.Logging.AddDebug();

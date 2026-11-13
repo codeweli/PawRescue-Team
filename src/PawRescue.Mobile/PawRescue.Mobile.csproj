@@ -25,6 +25,8 @@
     <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#C8243B" />
     <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#C8243B" BaseSize="128,128" />
     <MauiImage Include="Resources\Images\*" />
+    <!-- Nunito: friendly rounded font (SIL Open Font License, see Resources/Fonts/Nunito-OFL.txt) -->
+    <MauiFont Include="Resources\Fonts\*.ttf" />
   </ItemGroup>
 
   <ItemGroup>

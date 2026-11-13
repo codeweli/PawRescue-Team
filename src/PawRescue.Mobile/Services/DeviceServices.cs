@@ -219,21 +219,44 @@ public class MediaService : IMediaService
 /// </summary>
 public static class MarkerClusterer
 {
-    // ============================================================
-    // TODO(MEMBER 3): Marker clustering
-    // ------------------------------------------------------------
-    // Right now every report becomes its own pin, so a busy area is unreadable when zoomed out.
-    // Goal: merge reports that are close together into ONE pin labelled "N reports here".
-    //   1. Pick a grid cell size from the zoom level, e.g. cellDeg = visibleRadiusKm / 111.0 / 6.0
-    //      (if visibleRadiusKm < 1.5 don't cluster at all).
-    //   2. GroupBy each report's cell: (Math.Floor(lat / cellDeg), Math.Floor(lng / cellDeg)).
-    //   3. Groups with 1 report → ToPin(report).
-    //      Groups with more → new MapPinItem { Location = average lat/lng, Label = $"{count} reports here",
-    //                                         Address = highest severity, Count = count } (ReportId stays null).
-    //   MapViewModel.OpenPinAsync already zooms in when a cluster pin (ReportId == null) is tapped.
-    // ============================================================
+    /// <summary>
+    /// Grid-based marker clustering.
+    /// The visible map is cut into square cells; reports in the same cell become ONE pin
+    /// ("3 reports here"). Zoomed out → bigger cells → more merging. Zoomed in → every report shows.
+    /// Runs in O(n): one pass to put each report in a cell (a hash key), then one pin per cell.
+    /// </summary>
     public static List<MapPinItem> Cluster(IReadOnlyList<ReportSummaryDto> reports, double visibleRadiusKm)
-        => reports.Select(ToPin).ToList();
+    {
+        // Zoomed in close enough (< 1.5 km radius): no clustering, show every report.
+        if (visibleRadiusKm < 1.5)
+            return reports.Select(ToPin).ToList();
+
+        // 1 degree of latitude ≈ 111 km. About 6 cells across the visible radius.
+        var cellDeg = Math.Max(visibleRadiusKm / 111.0 / 6.0, 0.0005);
+
+        return reports
+            .GroupBy(r => (Row: Math.Floor(r.Latitude / cellDeg), Col: Math.Floor(r.Longitude / cellDeg)))
+            .Select(cell =>
+            {
+                var items = cell.ToList();
+                if (items.Count == 1) return ToPin(items[0]);
+
+                // Color the cluster by its most urgent report, so urgent areas still stand out.
+                var mostUrgent = items.OrderByDescending(r => r.IsHighPriority)
+                                      .ThenByDescending(r => r.PriorityScore)
+                                      .First();
+                return new MapPinItem
+                {
+                    Location = new Location(items.Average(r => r.Latitude), items.Average(r => r.Longitude)),
+                    Label = $"{items.Count} reports here",
+                    Address = "Tap to zoom in",
+                    Count = items.Count,                  // ReportId stays null → tapping zooms in
+                    Name = $"{items.Count} reports here",
+                    NeedColor = mostUrgent.NeedColor
+                };
+            })
+            .ToList();
+    }
 
     private static MapPinItem ToPin(ReportSummaryDto r) => new()
     {
