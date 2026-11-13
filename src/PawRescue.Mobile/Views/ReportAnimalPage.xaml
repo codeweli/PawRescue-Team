@@ -65,9 +65,9 @@
                 <!-- 2. Details -->
                 <Label Text="Details" Style="{StaticResource SectionTitle}" Margin="0,16,0,0" />
 
-                <Label Text="Short title" Style="{StaticResource FieldLabel}" />
+                <Label Text="Animal name or short title" Style="{StaticResource FieldLabel}" />
                 <Border Style="{StaticResource InputBorder}">
-                    <Entry Text="{Binding ReportTitle}" Placeholder="e.g. Injured puppy near the market" MaxLength="120" />
+                    <Entry Text="{Binding ReportTitle}" Placeholder="e.g. Luna, or Injured puppy near the market" MaxLength="120" />
                 </Border>
 
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">

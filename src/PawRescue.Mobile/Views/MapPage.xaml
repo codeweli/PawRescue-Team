@@ -5,65 +5,120 @@
                 xmlns:views="clr-namespace:PawRescue.Mobile.Views"
                 xmlns:vm="clr-namespace:PawRescue.Mobile.ViewModels"
                 xmlns:m="clr-namespace:PawRescue.Mobile.Models"
+                xmlns:controls="clr-namespace:PawRescue.Mobile.Controls"
                 x:Class="PawRescue.Mobile.Views.MapPage"
                 x:DataType="vm:MapViewModel"
                 Shell.NavBarIsVisible="False">
 
-    <Grid>
-        <!-- Map fills the screen -->
-        <maps:Map x:Name="RescueMap" ItemsSource="{Binding Pins}" IsShowingUser="True" MapType="Street">
-            <maps:Map.ItemTemplate>
-                <DataTemplate x:DataType="m:MapPinItem">
-                    <maps:Pin Location="{Binding Location}"
-                              Label="{Binding Label}"
-                              Address="{Binding Address}"
-                              Type="Place"
-                              InfoWindowClicked="OnInfoWindowClicked" />
-                </DataTemplate>
-            </maps:Map.ItemTemplate>
-        </maps:Map>
+    <Grid RowDefinitions="Auto,Auto,*" Padding="0,0,0,8">
 
-        <!-- Floating search + filters (top) -->
-        <VerticalStackLayout VerticalOptions="Start" Padding="12,16,12,0" Spacing="8">
-            <Border Style="{StaticResource Card}" Padding="4,0">
-                <SearchBar Text="{Binding SearchText}" Placeholder="Search reports, e.g. &quot;puppy&quot;"
-                           SearchCommand="{Binding SearchCommand}" />
+        <!-- Title -->
+        <Label Text="Rescue Map" Style="{StaticResource ScreenTitle}" Margin="16,16,16,8" />
+
+        <!-- Search + filters -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" Margin="16,0,16,10">
+            <Border Style="{StaticResource SearchField}" HeightRequest="44">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                    <Image Source="icon_search.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
+                    <Entry Grid.Column="1" Text="{Binding SearchText}" Placeholder="Search the map" FontSize="14"
+                           ReturnType="Search" ReturnCommand="{Binding SearchCommand}" VerticalOptions="Center" />
+                </Grid>
             </Border>
+            <Border Grid.Column="1" Style="{StaticResource Chip}" Padding="12,0" HeightRequest="44">
+                <Picker ItemsSource="{Binding SeverityFilters}" SelectedItem="{Binding SelectedSeverityFilter}"
+                        Title="Urgency" FontSize="13" WidthRequest="78" VerticalOptions="Center" />
+            </Border>
+            <Border Grid.Column="2" Style="{StaticResource Chip}" Padding="12,0" HeightRequest="44">
+                <Picker ItemsSource="{Binding StatusFilters}" SelectedItem="{Binding SelectedStatusFilter}"
+                        Title="Status" FontSize="13" WidthRequest="78" VerticalOptions="Center" />
+            </Border>
+        </Grid>
 
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                <Border Style="{StaticResource Chip}" Padding="12,0" HeightRequest="42">
-                    <Grid ColumnDefinitions="Auto,*">
-                        <Label Text="⚠️" VerticalOptions="Center" />
-                        <Picker Grid.Column="1" ItemsSource="{Binding SeverityFilters}" SelectedItem="{Binding SelectedSeverityFilter}"
-                                Title="Urgency" FontSize="13" />
-                    </Grid>
+        <!-- Rounded map card -->
+        <Border Grid.Row="2" StrokeThickness="0" StrokeShape="RoundRectangle 24" Margin="12,0">
+            <Grid>
+                <maps:Map x:Name="RescueMap" ItemsSource="{Binding Pins}" IsShowingUser="True" MapType="Street">
+                    <maps:Map.ItemTemplate>
+                        <DataTemplate x:DataType="m:MapPinItem">
+                            <controls:ColoredPin Location="{Binding Location}"
+                                                 Label="{Binding Label}"
+                                                 Address="{Binding Address}"
+                                                 Hue="{Binding Hue}"
+                                                 Type="Place"
+                                                 MarkerClicked="OnMarkerClicked"
+                                                 InfoWindowClicked="OnInfoWindowClicked" />
+                        </DataTemplate>
+                    </maps:Map.ItemTemplate>
+                </maps:Map>
+
+                <!-- Legend (top-left) -->
+                <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 14" Padding="12,10"
+                        HorizontalOptions="Start" VerticalOptions="Start" Margin="12">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.12" />
+                    </Border.Shadow>
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Legend}" Spacing="5">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:LegendItem">
+                                <HorizontalStackLayout Spacing="8">
+                                    <BoxView Color="{Binding Color}" WidthRequest="10" HeightRequest="10" CornerRadius="5" VerticalOptions="Center" />
+                                    <Label Text="{Binding Label}" FontSize="11" FontAttributes="Bold" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
                 </Border>
-                <Border Grid.Column="1" Style="{StaticResource Chip}" Padding="12,0" HeightRequest="42">
-                    <Grid ColumnDefinitions="Auto,*">
-                        <Label Text="🏷️" VerticalOptions="Center" />
-                        <Picker Grid.Column="1" ItemsSource="{Binding StatusFilters}" SelectedItem="{Binding SelectedStatusFilter}"
-                                Title="Status" FontSize="13" />
+
+                <!-- Locate-me button (top-right) -->
+                <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 22"
+                        WidthRequest="44" HeightRequest="44" HorizontalOptions="End" VerticalOptions="Start" Margin="12">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.12" />
+                    </Border.Shadow>
+                    <Label Text="◎" FontSize="22" TextColor="{StaticResource Primary}" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CenterOnMeCommand}" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Result count (bottom, when nothing is selected) -->
+                <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 14" Padding="12,8"
+                        HorizontalOptions="Center" VerticalOptions="End" Margin="12"
+                        IsVisible="{Binding HasSelection, Converter={StaticResource InvertedBool}}">
+                    <Label Text="{Binding ResultText}" FontSize="12" FontAttributes="Bold" />
+                </Border>
+
+                <!-- Selected report preview card (bottom) -->
+                <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 20" Padding="12"
+                        VerticalOptions="End" Margin="12" IsVisible="{Binding HasSelection}">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,4" Radius="14" Opacity="0.15" />
+                    </Border.Shadow>
+                    <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
+                        <Grid ColumnDefinitions="80,*,Auto" ColumnSpacing="12">
+                            <Border StrokeThickness="0" StrokeShape="RoundRectangle 12" WidthRequest="80" HeightRequest="80"
+                                    BackgroundColor="{StaticResource SurfaceMuted}">
+                                <Image Source="{Binding SelectedPin.ThumbnailUrl}" Aspect="AspectFill" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                <Label Text="{Binding SelectedPin.Name}" Style="{StaticResource CardName}" />
+                                <Label Text="{Binding SelectedPin.Subtitle}" Style="{StaticResource Caption}" MaxLines="1" LineBreakMode="TailTruncation" />
+                                <HorizontalStackLayout Spacing="8">
+                                    <BoxView Color="{Binding SelectedPin.NeedColor}" WidthRequest="9" HeightRequest="9" CornerRadius="4.5" VerticalOptions="Center" />
+                                    <Label Text="{Binding SelectedPin.NeedText}" FontAttributes="Bold" FontSize="14" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                                <Label Text="{Binding SelectedPin.ConditionText}" Style="{StaticResource Caption}" />
+                            </VerticalStackLayout>
+                            <Image Grid.Column="2" Source="icon_close.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Start">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ClosePreviewCommand}" />
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Grid>
+                        <Button Grid.Row="1" Text="View details" Command="{Binding ViewDetailsCommand}" />
                     </Grid>
                 </Border>
             </Grid>
-        </VerticalStackLayout>
-
-        <!-- Bottom: result count + legend + locate-me -->
-        <Grid VerticalOptions="End" Padding="12,0,12,16" ColumnDefinitions="*,Auto" ColumnSpacing="10">
-            <Border Style="{StaticResource Card}" Padding="12,8">
-                <VerticalStackLayout Spacing="4">
-                    <Label Text="{Binding ResultText}" FontAttributes="Bold" FontSize="13" />
-                    <HorizontalStackLayout Spacing="10">
-                        <Label Text="● Low" TextColor="{StaticResource SeverityLow}" FontSize="11" />
-                        <Label Text="● Medium" TextColor="{StaticResource SeverityMedium}" FontSize="11" />
-                        <Label Text="● High" TextColor="{StaticResource SeverityHigh}" FontSize="11" />
-                        <Label Text="● Critical" TextColor="{StaticResource SeverityCritical}" FontSize="11" />
-                    </HorizontalStackLayout>
-                    <Label Text="Tap a pin, then its label, to open the report." Style="{StaticResource Caption}" FontSize="11" />
-                </VerticalStackLayout>
-            </Border>
-            <Button Grid.Column="1" Text="◎" FontSize="22" WidthRequest="56" HeightRequest="56" CornerRadius="28"
-                    Padding="0" VerticalOptions="End" Command="{Binding CenterOnMeCommand}" />
-        </Grid>
+        </Border>
     </Grid>
 </views:BasePage>

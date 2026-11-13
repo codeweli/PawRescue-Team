@@ -19,6 +19,15 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
+#if ANDROID
+        // Colored map pins: red = medical, orange = food, yellow = shelter, green = helped.
+        Microsoft.Maui.Maps.Handlers.MapPinHandler.Mapper.AppendToMapping("PawPinColor", (handler, pin) =>
+        {
+            if (pin is Controls.ColoredPin colored)
+                handler.PlatformView.SetIcon(Android.Gms.Maps.Model.BitmapDescriptorFactory.DefaultMarker(colored.Hue));
+        });
+#endif
+
         var s = builder.Services;
 
         // Core infrastructure
@@ -33,6 +42,7 @@ public static class MauiProgram
         s.AddSingleton<IDialogService, DialogService>();
         s.AddSingleton<ILocationService, LocationService>();
         s.AddSingleton<IMediaService, MediaService>();
+        s.AddSingleton<IAppSettings, AppSettings>();
 
         // API services (interfaces → implementations)
         s.AddTransient<IAuthApi, AuthApi>();
@@ -52,7 +62,10 @@ public static class MauiProgram
         s.AddTransient<ForgotPasswordPage>().AddTransient<ForgotPasswordViewModel>();
         s.AddSingleton<HomePage>().AddSingleton<HomeViewModel>();
         s.AddSingleton<MapPage>().AddSingleton<MapViewModel>();
-        s.AddSingleton<ReportAnimalPage>().AddSingleton<ReportAnimalViewModel>();
+        s.AddSingleton<RescueCasesPage>().AddSingleton<RescueCasesViewModel>();
+        s.AddTransient<ReportAnimalPage>().AddTransient<ReportAnimalViewModel>();
+        s.AddTransient<SafetyTipsPage>();
+        s.AddTransient<NotificationSettingsPage>().AddTransient<NotificationSettingsViewModel>();
         s.AddSingleton<NotificationsPage>().AddSingleton<NotificationsViewModel>();
         s.AddSingleton<ProfilePage>().AddSingleton<ProfileViewModel>();
         s.AddTransient<ReportDetailsPage>().AddTransient<ReportDetailsViewModel>();

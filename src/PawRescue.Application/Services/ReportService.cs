@@ -151,6 +151,16 @@ public class ReportService : IReportService
         return await _healthAnalyzer.AnalyzeAsync(imageUrl, ct);
     }
 
+    /// <summary>Home screen stats: total reports, animals helped (rescued or closed after rescue), open cases.</summary>
+    public async Task<CommunityStatsDto> GetCommunityStatsAsync(CancellationToken ct = default)
+    {
+        var byStatus = await _reports.CountByStatusAsync(ct);
+        return new CommunityStatsDto(
+            AnimalsReported: await _reports.CountAsync(ct),
+            AnimalsHelped: byStatus.GetValueOrDefault(ReportStatus.Rescued) + byStatus.GetValueOrDefault(ReportStatus.Closed),
+            ActiveCases: await _reports.CountOpenAsync(null, ct));
+    }
+
     // ---------- helpers ----------
 
     private async Task<AnimalReport> LoadAsync(Guid id, CancellationToken ct)

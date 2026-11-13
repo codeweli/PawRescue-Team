@@ -1,14 +1,21 @@
+using PawRescue.Mobile.Views;
+
 namespace PawRescue.Mobile;
 
-public partial class App : Application
+public partial class AppShell : Shell
 {
-    public App()
+    public AppShell()
     {
-        InitializeComponent(); // loads Colors.xaml / Styles.xaml FIRST
-        UserAppTheme = AppTheme.Light; // the Figma design is light-only
-    }
+        InitializeComponent();
 
-    // AppShell is created here (after the resources above are loaded),
-    // otherwise its StaticResource lookups like "BaseShell" fail.
-    protected override Window CreateWindow(IActivationState? activationState) => new(new AppShell());
+        // Pages pushed on top of the tabs (have a back button)
+        Routing.RegisterRoute("register", typeof(RegisterPage));
+        Routing.RegisterRoute("forgot", typeof(ForgotPasswordPage));
+        Routing.RegisterRoute("reportanimal", typeof(ReportAnimalPage));
+        Routing.RegisterRoute("reportdetails", typeof(ReportDetailsPage));
+        Routing.RegisterRoute("volunteer", typeof(VolunteerDashboardPage));
+        Routing.RegisterRoute("admin", typeof(AdminDashboardPage));
+        Routing.RegisterRoute("safetytips", typeof(SafetyTipsPage));
+        Routing.RegisterRoute("notificationsettings", typeof(NotificationSettingsPage));
+    }
 }

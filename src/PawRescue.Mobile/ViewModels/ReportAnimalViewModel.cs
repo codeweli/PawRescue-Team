@@ -105,7 +105,8 @@ public partial class ReportAnimalViewModel : BaseViewModel
 
         await Dialogs.AlertAsync("Report sent 🐾", "Thank you! Nearby volunteers have been notified.");
         Reset();
-        await Shell.Current.GoToAsync("reportdetails", new Dictionary<string, object> { ["id"] = created.Id });
+        // "../reportdetails" replaces this form with the new report, so Back returns to where the user started.
+        await Shell.Current.GoToAsync("../reportdetails", new Dictionary<string, object> { ["id"] = created.Id });
     });
 
     private string? Validate()

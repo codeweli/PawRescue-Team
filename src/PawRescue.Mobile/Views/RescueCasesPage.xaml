@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:BasePage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:views="clr-namespace:PawRescue.Mobile.Views"
+                xmlns:vm="clr-namespace:PawRescue.Mobile.ViewModels"
+                x:Class="PawRescue.Mobile.Views.RescueCasesPage"
+                x:DataType="vm:RescueCasesViewModel"
+                Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*">
+
+        <!-- Title + red "+" button -->
+        <Grid ColumnDefinitions="*,Auto" Padding="16,16,16,8">
+            <Label Text="{Binding Title}" Style="{StaticResource ScreenTitle}" VerticalOptions="Center" />
+            <Border Grid.Column="1" BackgroundColor="{StaticResource Primary}" StrokeThickness="0" StrokeShape="RoundRectangle 23"
+                    WidthRequest="46" HeightRequest="46">
+                <Image Source="icon_plus_white.png" WidthRequest="22" HeightRequest="22" />
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NewReportCommand}" />
+                </Border.GestureRecognizers>
+            </Border>
+        </Grid>
+
+        <!-- Search -->
+        <Border Grid.Row="1" Style="{StaticResource SearchField}" Margin="16,0,16,8">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                <Image Source="icon_search.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" />
+                <Entry Grid.Column="1" Text="{Binding SearchText}" Placeholder="Search name, place or notes"
+                       ReturnType="Search" ReturnCommand="{Binding SearchCommand}" VerticalOptions="Center" />
+                <Image Grid.Column="2" Source="icon_close.png" WidthRequest="16" HeightRequest="16" VerticalOptions="Center"
+                       IsVisible="{Binding SearchText, Converter={StaticResource IsNotNull}}">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ClearSearchCommand}" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
+        </Border>
+
+        <!-- Filter chips -->
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Filters}" SelectionMode="Single"
+                        SelectedItem="{Binding SelectedFilter}" HeightRequest="46" Margin="12,0,0,0">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="x:String">
+                    <Grid Padding="0,2">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="Transparent" />
+                                        <Setter TargetName="ChipBorder" Property="Border.BackgroundColor" Value="{StaticResource Secondary}" />
+                                        <Setter TargetName="ChipLabel" Property="Label.TextColor" Value="White" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="ChipBorder" Style="{StaticResource Chip}">
+                            <Label x:Name="ChipLabel" Text="{Binding .}" FontSize="14" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}" />
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Label Grid.Row="3" Text="{Binding CountText}" Style="{StaticResource Caption}" Margin="16,4,16,2" />
+
+        <!-- Cases -->
+        <RefreshView Grid.Row="4" IsRefreshing="{Binding IsRefreshing}" Command="{Binding LoadCommand}">
+            <CollectionView ItemsSource="{Binding Cases}"
+                            ItemTemplate="{StaticResource ReportCardTemplate}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedCase}">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="32" Spacing="6" HorizontalOptions="Center">
+                        <Label Text="🐾" FontSize="44" HorizontalOptions="Center" />
+                        <Label Text="No reports here" Style="{StaticResource SectionTitle}" HorizontalOptions="Center" />
+                        <Label Text="Try another filter, or tap + to report an animal." Style="{StaticResource Caption}" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.Footer>
+                    <BoxView HeightRequest="16" Color="Transparent" />
+                </CollectionView.Footer>
+            </CollectionView>
+        </RefreshView>
+
+        <ActivityIndicator Grid.Row="4" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="Start" Margin="0,24" />
+    </Grid>
+</views:BasePage>

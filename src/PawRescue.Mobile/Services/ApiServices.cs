@@ -90,6 +90,7 @@ public interface IReportApi
     Task<PagedResult<ReportSummaryDto>> SearchAsync(string? keyword, ReportStatus? status = null, SeverityLevel? severity = null, int page = 1);
     Task<List<ReportSummaryDto>> GetMineAsync();
     Task<HealthAnalysisResult> AnalyzeHealthAsync(Guid id);
+    Task<CommunityStatsDto> GetCommunityStatsAsync();
 }
 
 public class ReportApi : IReportApi
@@ -151,6 +152,8 @@ public class ReportApi : IReportApi
 
     public Task<HealthAnalysisResult> AnalyzeHealthAsync(Guid id)
         => _api.PostAsync<HealthAnalysisResult>($"api/reports/{id}/ai-analysis", null);
+
+    public Task<CommunityStatsDto> GetCommunityStatsAsync() => _api.GetAsync<CommunityStatsDto>("api/reports/stats");
 
     private static string F(double v) => v.ToString(CultureInfo.InvariantCulture);
 }

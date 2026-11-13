@@ -72,6 +72,11 @@ public class ReportsController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>Community numbers for the Home screen (reported / helped / active).</summary>
+    [HttpGet("stats")]
+    public async Task<ActionResult<CommunityStatsDto>> Stats(CancellationToken ct)
+        => Ok(await _reports.GetCommunityStatsAsync(ct));
+
     /// <summary>Reports submitted by the logged-in user (Profile → History).</summary>
     [HttpGet("mine")]
     public async Task<ActionResult<IReadOnlyList<ReportSummaryDto>>> Mine(CancellationToken ct)

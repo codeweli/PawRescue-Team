@@ -27,6 +27,7 @@ public interface IReportService
     Task<PagedResult<ReportSummaryDto>> SearchAsync(SearchQuery query, CancellationToken ct = default);
     Task<IReadOnlyList<ReportSummaryDto>> GetMyReportsAsync(CancellationToken ct = default);
     Task<HealthAnalysisResult> AnalyzeHealthAsync(Guid id, CancellationToken ct = default);
+    Task<CommunityStatsDto> GetCommunityStatsAsync(CancellationToken ct = default);
 }
 
 public interface IRescueService

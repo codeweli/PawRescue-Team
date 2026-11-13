@@ -233,14 +233,14 @@ public class DialogService : IDialogService
     private static Page Page => Shell.Current?.CurrentPage ?? Application.Current!.Windows[0].Page!;
 
     public Task AlertAsync(string title, string message, string ok = "OK")
-        => MainThread.InvokeOnMainThreadAsync(() => Page.DisplayAlert(title, message, ok));
+        => MainThread.InvokeOnMainThreadAsync(() => Page.DisplayAlertAsync(title, message, ok));
 
     public Task<bool> ConfirmAsync(string title, string message, string accept = "Yes", string cancel = "Cancel")
-        => MainThread.InvokeOnMainThreadAsync(() => Page.DisplayAlert(title, message, accept, cancel));
+        => MainThread.InvokeOnMainThreadAsync(() => Page.DisplayAlertAsync(title, message, accept, cancel));
 
     public async Task<string?> ActionSheetAsync(string title, params string[] options)
     {
-        var result = await MainThread.InvokeOnMainThreadAsync(() => Page.DisplayActionSheet(title, "Cancel", null, options));
+        var result = await MainThread.InvokeOnMainThreadAsync(() => Page.DisplayActionSheetAsync(title, "Cancel", null, options));
         return result == "Cancel" ? null : result;
     }
 

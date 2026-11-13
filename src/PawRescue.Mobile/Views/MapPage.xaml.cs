@@ -35,6 +35,14 @@ public partial class MapPage : BasePage
         _vm.OnVisibleRegionChanged(region.Center.Latitude, region.Center.Longitude, region.Radius.Kilometers);
     }
 
+    /// <summary>Tapping a pin shows the bottom preview card instead of Google's small info bubble.</summary>
+    private async void OnMarkerClicked(object? sender, PinClickedEventArgs e)
+    {
+        e.HideInfoWindow = true;
+        if (sender is Pin { BindingContext: MapPinItem item })
+            await _vm.SelectPinAsync(item);
+    }
+
     private async void OnInfoWindowClicked(object? sender, PinClickedEventArgs e)
     {
         e.HideInfoWindow = true;

@@ -17,8 +17,8 @@
                     <conv:IsNotNullConverter x:Key="IsNotNull" />
                     <conv:UtcToLocalTextConverter x:Key="UtcToLocal" />
                     <conv:CountToBoolConverter x:Key="CountToBool" />
-                    <conv:BoolToColorConverter x:Key="DoneToColor" TrueColor="#F97316" FalseColor="#E7DDD3" />
-                    <conv:BoolToColorConverter x:Key="ReadToBackground" TrueColor="#FFFFFF" FalseColor="#FFF1E6" />
+                    <conv:BoolToColorConverter x:Key="DoneToColor" TrueColor="#C8243B" FalseColor="#ECE3E4" />
+                    <conv:BoolToColorConverter x:Key="ReadToBackground" TrueColor="#FFFFFF" FalseColor="#FFFFFF" />
                 </ResourceDictionary>
                 <ResourceDictionary Source="Resources/Styles/Templates.xaml" />
             </ResourceDictionary.MergedDictionaries>

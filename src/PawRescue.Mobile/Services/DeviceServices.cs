@@ -75,7 +75,10 @@ public class MediaService : IMediaService
     }
 
     public async Task<PhotoItem?> PickPhotoAsync()
-        => await SaveLocalAsync(await MediaPicker.Default.PickPhotoAsync());
+    {
+        var picked = await MediaPicker.Default.PickPhotosAsync(new MediaPickerOptions { SelectionLimit = 1 });
+        return await SaveLocalAsync(picked?.FirstOrDefault());
+    }
 
     /// <summary>Copies the photo into app cache so we can preview it and upload it later.</summary>
     private static async Task<PhotoItem?> SaveLocalAsync(FileResult? file)
@@ -133,8 +136,15 @@ public static class MarkerClusterer
     private static MapPinItem ToPin(ReportSummaryDto r) => new()
     {
         Location = new Location(r.Latitude, r.Longitude),
-        Label = string.IsNullOrWhiteSpace(r.Title) ? "Animal report" : $"{r.AnimalEmoji} {r.Title}",
-        Address = $"{r.Severity} • {r.Status}",
-        ReportId = r.Id
+        Label = string.IsNullOrWhiteSpace(r.Title) ? "Animal report" : r.Title,
+        Address = $"{r.AnimalType} · {r.NeedText}",
+        ReportId = r.Id,
+        Hue = Needs.HueOf(r.Need),
+        Name = string.IsNullOrWhiteSpace(r.Title) ? "Animal report" : r.Title,
+        Subtitle = r.Subtitle,
+        NeedText = Needs.MapLabel(r.Need),
+        ConditionText = r.NeedText,
+        NeedColor = r.NeedColor,
+        ThumbnailUrl = r.ThumbnailUrl
     };
 }
