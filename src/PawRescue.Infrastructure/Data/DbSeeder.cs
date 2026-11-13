@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -28,14 +29,27 @@ public static class DbSeeder
         if (string.IsNullOrWhiteSpace(seed.AdminPassword))
         {
             logger.LogWarning("Seed:AdminPassword is empty — admin account not created.");
-            return;
+        }
+        else
+        {
+            var email = seed.AdminEmail.Trim().ToLowerInvariant();
+            if (!await db.Users.AnyAsync(u => u.Email == email))
+            {
+                db.Users.Add(new User("Paw Rescue Admin", email, hasher.Hash(seed.AdminPassword), RoleIds.Administrator));
+                await db.SaveChangesAsync();
+                logger.LogInformation("Seeded administrator {Email}", email);
+            }
         }
 
-        var email = seed.AdminEmail.Trim().ToLowerInvariant();
-        if (await db.Users.AnyAsync(u => u.Email == email)) return;
+        // Demo reports around the Philippines (only when the database has no reports yet)
+        if (seed.SampleData)
+        {
+            await SampleDataSeeder.SeedAsync(db, hasher, logger);
 
-        db.Users.Add(new User("Paw Rescue Admin", email, hasher.Hash(seed.AdminPassword), RoleIds.Administrator));
-        await db.SaveChangesAsync();
-        logger.LogInformation("Seeded administrator {Email}", email);
+            var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+            var storage = scope.ServiceProvider.GetRequiredService<IOptions<StorageOptions>>().Value;
+            var webRoot = env.WebRootPath ?? Path.Combine(env.ContentRootPath, "wwwroot");
+            await SampleDataSeeder.AttachSamplePhotosAsync(db, webRoot, storage.PublicBaseUrl, logger);
+        }
     }
 }

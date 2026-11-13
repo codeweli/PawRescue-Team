@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 using PawRescue.Mobile.Services;
 using PawRescue.Mobile.ViewModels;
 using PawRescue.Mobile.Views;
@@ -13,20 +14,12 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .UseMauiMaps();
+            .UseSkiaSharp(); // required by Mapsui (OpenStreetMap). Without it the Map tab crashes.
 
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
 
-#if ANDROID
-        // Colored map pins: red = medical, orange = food, yellow = shelter, green = helped.
-        Microsoft.Maui.Maps.Handlers.MapPinHandler.Mapper.AppendToMapping("PawPinColor", (handler, pin) =>
-        {
-            if (pin is Controls.ColoredPin colored)
-                handler.PlatformView.SetIcon(Android.Gms.Maps.Model.BitmapDescriptorFactory.DefaultMarker(colored.Hue));
-        });
-#endif
 
         var s = builder.Services;
 
@@ -43,6 +36,7 @@ public static class MauiProgram
         s.AddSingleton<ILocationService, LocationService>();
         s.AddSingleton<IMediaService, MediaService>();
         s.AddSingleton<IAppSettings, AppSettings>();
+        s.AddSingleton<IDirectionsService, DirectionsService>();
 
         // API services (interfaces → implementations)
         s.AddTransient<IAuthApi, AuthApi>();

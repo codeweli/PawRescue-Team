@@ -74,10 +74,14 @@
                         <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
                             <Label Text="Location" FontAttributes="Bold" />
                             <Label Text="{Binding Report.Location.Address, TargetNullValue='Pinned on map'}" Style="{StaticResource Caption}" />
+                            <Label Text="Tap to see it on the map" FontSize="12" TextColor="{StaticResource Primary}" />
                         </VerticalStackLayout>
                         <Button Grid.Column="2" Text="Directions" Style="{StaticResource SmallButton}" BackgroundColor="{StaticResource Secondary}"
                                 Command="{Binding OpenDirectionsCommand}" />
                     </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ShowOnMapCommand}" />
+                    </Border.GestureRecognizers>
                 </Border>
 
                 <!-- Rescuer -->

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <views:BasePage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
+                xmlns:mapsui="clr-namespace:Mapsui.UI.Maui;assembly=Mapsui.UI.Maui"
                 xmlns:views="clr-namespace:PawRescue.Mobile.Views"
                 xmlns:vm="clr-namespace:PawRescue.Mobile.ViewModels"
-                xmlns:m="clr-namespace:PawRescue.Mobile.Models"
-                xmlns:controls="clr-namespace:PawRescue.Mobile.Controls"
                 x:Class="PawRescue.Mobile.Views.MapPage"
                 x:DataType="vm:MapViewModel"
                 Shell.NavBarIsVisible="False">
@@ -20,7 +18,7 @@
             <Border Style="{StaticResource SearchField}" HeightRequest="44">
                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
                     <Image Source="icon_search.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
-                    <Entry Grid.Column="1" Text="{Binding SearchText}" Placeholder="Search the map" FontSize="14"
+                    <Entry Grid.Column="1" Text="{Binding SearchText}" Placeholder="Search a place or report" FontSize="14"
                            ReturnType="Search" ReturnCommand="{Binding SearchCommand}" VerticalOptions="Center" />
                 </Grid>
             </Border>
@@ -37,19 +35,12 @@
         <!-- Rounded map card -->
         <Border Grid.Row="2" StrokeThickness="0" StrokeShape="RoundRectangle 24" Margin="12,0">
             <Grid>
-                <maps:Map x:Name="RescueMap" ItemsSource="{Binding Pins}" IsShowingUser="True" MapType="Street">
-                    <maps:Map.ItemTemplate>
-                        <DataTemplate x:DataType="m:MapPinItem">
-                            <controls:ColoredPin Location="{Binding Location}"
-                                                 Label="{Binding Label}"
-                                                 Address="{Binding Address}"
-                                                 Hue="{Binding Hue}"
-                                                 Type="Place"
-                                                 MarkerClicked="OnMarkerClicked"
-                                                 InfoWindowClicked="OnInfoWindowClicked" />
-                        </DataTemplate>
-                    </maps:Map.ItemTemplate>
-                </maps:Map>
+                <!-- OpenStreetMap (Mapsui). Pins are drawn in MapPage.xaml.cs from MapViewModel.Pins -->
+                <mapsui:MapControl x:Name="RescueMap" />
+
+                <!-- Required credit for OpenStreetMap data -->
+                <Label Text="© OpenStreetMap contributors" FontSize="10" TextColor="{StaticResource TextSecondary}"
+                       BackgroundColor="#CCFFFFFF" Padding="6,2" HorizontalOptions="End" VerticalOptions="End" />
 
                 <!-- Legend (top-left) -->
                 <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 14" Padding="12,10"
@@ -83,14 +74,14 @@
 
                 <!-- Result count (bottom, when nothing is selected) -->
                 <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 14" Padding="12,8"
-                        HorizontalOptions="Center" VerticalOptions="End" Margin="12"
+                        HorizontalOptions="Center" VerticalOptions="End" Margin="12,12,12,24"
                         IsVisible="{Binding HasSelection, Converter={StaticResource InvertedBool}}">
                     <Label Text="{Binding ResultText}" FontSize="12" FontAttributes="Bold" />
                 </Border>
 
                 <!-- Selected report preview card (bottom) -->
                 <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 20" Padding="12"
-                        VerticalOptions="End" Margin="12" IsVisible="{Binding HasSelection}">
+                        VerticalOptions="End" Margin="12,12,12,24" IsVisible="{Binding HasSelection}">
                     <Border.Shadow>
                         <Shadow Brush="#000000" Offset="0,4" Radius="14" Opacity="0.15" />
                     </Border.Shadow>
@@ -115,7 +106,21 @@
                                 </Image.GestureRecognizers>
                             </Image>
                         </Grid>
-                        <Button Grid.Row="1" Text="View details" Command="{Binding ViewDetailsCommand}" />
+                        <VerticalStackLayout Grid.Row="1" Spacing="8">
+                            <!-- Route summary, e.g. "4.2 km · about 11 min drive" -->
+                            <HorizontalStackLayout Spacing="8" IsVisible="{Binding RouteText, Converter={StaticResource IsNotNull}}">
+                                <ActivityIndicator IsRunning="{Binding IsRouting}" IsVisible="{Binding IsRouting}" WidthRequest="16" HeightRequest="16" />
+                                <Label Text="{Binding RouteText}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource Primary}" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                                <!-- Before a route: "Directions" draws it in the app. After: "Navigate" opens Google Maps turn-by-turn. -->
+                                <Button Text="Directions" Style="{StaticResource OutlineButton}" Command="{Binding ShowRouteCommand}"
+                                        IsVisible="{Binding HasRoute, Converter={StaticResource InvertedBool}}" />
+                                <Button Text="Navigate" Style="{StaticResource OutlineButton}" Command="{Binding NavigateCommand}"
+                                        IsVisible="{Binding HasRoute}" />
+                                <Button Grid.Column="1" Text="View details" Command="{Binding ViewDetailsCommand}" />
+                            </Grid>
+                        </VerticalStackLayout>
                     </Grid>
                 </Border>
             </Grid>

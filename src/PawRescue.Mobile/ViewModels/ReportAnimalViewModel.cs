@@ -87,6 +87,11 @@ public partial class ReportAnimalViewModel : BaseViewModel
             LocationStatus = "Couldn't get GPS. Turn on location and tap to retry.";
             return;
         }
+        if (!Philippines.Contains(point))
+        {
+            LocationStatus = "Your location is outside the Philippines. Set a Philippine location and tap to retry.";
+            return;
+        }
 
         Latitude = point.Latitude;
         Longitude = point.Longitude;

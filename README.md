@@ -34,7 +34,7 @@ Open **http://localhost:5080/swagger**. A seeded admin is created: `admin@pawres
 Password-reset codes are printed in the API console (email sending is a dev stub).
 
 ### Mobile app
-1. Put a Google Maps API key in `src/PawRescue.Mobile/Platforms/Android/AndroidManifest.xml` (`YOUR_GOOGLE_MAPS_API_KEY`).
+1. The map uses OpenStreetMap (Mapsui): no API key or billing needed, just internet on the phone/emulator.
 2. Start the API, then run `PawRescue.Mobile` on the Android emulator. It calls `http://10.0.2.2:5080` (the host PC).
 3. On a real phone, change `ApiConfig.BaseUrl` in `Services/Infrastructure.cs` to your PC's LAN IP and set `Storage:PublicBaseUrl` in the API to the same IP so photos load.
 
