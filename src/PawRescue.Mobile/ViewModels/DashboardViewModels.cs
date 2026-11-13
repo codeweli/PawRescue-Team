@@ -152,14 +152,17 @@ public partial class ProfileViewModel : BaseViewModel
     private readonly IReportApi _reports;
     private readonly IAuthApi _auth;
     private readonly TokenStore _tokens;
+    private readonly RescueCasesViewModel _rescueCases;
 
-    public ProfileViewModel(IUserApi users, IReportApi reports, IAuthApi auth, TokenStore tokens, IDialogService dialogs) : base(dialogs)
+    public ProfileViewModel(IUserApi users, IReportApi reports, IAuthApi auth, TokenStore tokens,
+                            RescueCasesViewModel rescueCases, IDialogService dialogs) : base(dialogs)
     {
         _users = users;
         _reports = reports;
         _auth = auth;
         _tokens = tokens;
-        Title = "My Profile";
+        _rescueCases = rescueCases;
+        Title = "Profile";
     }
 
     public ObservableCollection<ReportSummaryDto> History { get; } = new();
@@ -172,6 +175,7 @@ public partial class ProfileViewModel : BaseViewModel
     [ObservableProperty] private bool isVolunteer;
     [ObservableProperty] private bool isAdmin;
     [ObservableProperty] private ReportSummaryDto? selectedReport;
+    [ObservableProperty] private string roleText = string.Empty;
 
     public override Task OnAppearingAsync() => LoadAsync();
 
@@ -179,6 +183,12 @@ public partial class ProfileViewModel : BaseViewModel
     private Task LoadAsync() => RunAsync(async () =>
     {
         Profile = await _users.GetProfileAsync();
+        RoleText = Profile.User.Role switch
+        {
+            Roles.Volunteer => "Community volunteer",
+            Roles.Administrator => "Administrator",
+            _ => "Community member"
+        };
         Initials = string.Concat(Profile.User.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(p => char.ToUpper(p[0])));
         IsVolunteer = Profile.User.Role is Roles.Volunteer or Roles.Administrator;
         IsAdmin = Profile.User.Role == Roles.Administrator;
@@ -217,6 +227,17 @@ public partial class ProfileViewModel : BaseViewModel
 
     [RelayCommand] private Task OpenVolunteerDashboardAsync() => Shell.Current.GoToAsync("volunteer");
     [RelayCommand] private Task OpenAdminDashboardAsync() => Shell.Current.GoToAsync("admin");
+
+    // ----- Profile menu -----
+    [RelayCommand]
+    private Task OpenMyReportsAsync()
+    {
+        _rescueCases.ShowMyReports();
+        return Shell.Current.GoToAsync("//reports");
+    }
+
+    [RelayCommand] private Task OpenNotificationSettingsAsync() => Shell.Current.GoToAsync("notificationsettings");
+    [RelayCommand] private Task OpenSafetyTipsAsync() => Shell.Current.GoToAsync("safetytips");
 
     [RelayCommand]
     private async Task LogoutAsync()

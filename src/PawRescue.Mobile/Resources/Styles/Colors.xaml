@@ -1,48 +1,60 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-  DESIGN TOKENS
-  Replace these hex values with the exact ones from the Figma file
-  (Figma → select a layer → Inspect panel). Every screen reads its colors
-  from here, so changing a token restyles the whole app.
+  DESIGN TOKENS (taken from the Paw Rescue UI mockups)
+  Every screen reads its colors from here, so changing a token restyles the whole app.
 -->
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- Brand -->
-    <Color x:Key="Primary">#F97316</Color>
-    <Color x:Key="PrimaryDark">#EA580C</Color>
-    <Color x:Key="PrimaryLight">#FFEDD5</Color>
-    <Color x:Key="Secondary">#0F766E</Color>
-    <Color x:Key="SecondaryLight">#CCFBF1</Color>
+    <!-- Brand: crimson red + soft pink -->
+    <Color x:Key="Primary">#C8243B</Color>
+    <Color x:Key="PrimaryDark">#A51C30</Color>
+    <Color x:Key="PrimaryLight">#FCE8EA</Color>
+    <!-- "Secondary" is the near-black used for selected chips and dark buttons -->
+    <Color x:Key="Secondary">#1F1A1B</Color>
+    <Color x:Key="SecondaryLight">#F2F0F0</Color>
 
     <!-- Surfaces -->
-    <Color x:Key="Background">#FFF8F1</Color>
+    <Color x:Key="Background">#FFFFFF</Color>
     <Color x:Key="Surface">#FFFFFF</Color>
-    <Color x:Key="SurfaceMuted">#F7F1EB</Color>
-    <Color x:Key="Border">#EFE4DA</Color>
+    <Color x:Key="SurfaceMuted">#F2F0F0</Color>
+    <Color x:Key="Border">#ECE6E6</Color>
 
     <!-- Text -->
-    <Color x:Key="TextPrimary">#1F2937</Color>
-    <Color x:Key="TextSecondary">#6B7280</Color>
+    <Color x:Key="TextPrimary">#1F1A1B</Color>
+    <Color x:Key="TextSecondary">#6B6466</Color>
     <Color x:Key="TextOnPrimary">#FFFFFF</Color>
 
+    <!-- Need categories (card dots, map pins, legend) -->
+    <Color x:Key="NeedMedical">#D7263D</Color>
+    <Color x:Key="NeedFood">#F2802C</Color>
+    <Color x:Key="NeedShelter">#EFC21B</Color>
+    <Color x:Key="NeedProvided">#2E9E5B</Color>
+
     <!-- Severity -->
-    <Color x:Key="SeverityLow">#22C55E</Color>
-    <Color x:Key="SeverityMedium">#EAB308</Color>
-    <Color x:Key="SeverityHigh">#F97316</Color>
-    <Color x:Key="SeverityCritical">#DC2626</Color>
+    <Color x:Key="SeverityLow">#2E9E5B</Color>
+    <Color x:Key="SeverityMedium">#E0A800</Color>
+    <Color x:Key="SeverityHigh">#F2802C</Color>
+    <Color x:Key="SeverityCritical">#C8243B</Color>
 
     <!-- Status -->
     <Color x:Key="StatusReported">#3B82F6</Color>
     <Color x:Key="StatusUnderReview">#8B5CF6</Color>
     <Color x:Key="StatusAssigned">#0EA5E9</Color>
-    <Color x:Key="StatusInProgress">#F59E0B</Color>
-    <Color x:Key="StatusRescued">#16A34A</Color>
-    <Color x:Key="StatusClosed">#6B7280</Color>
+    <Color x:Key="StatusInProgress">#F2802C</Color>
+    <Color x:Key="StatusRescued">#2E9E5B</Color>
+    <Color x:Key="StatusClosed">#6B6466</Color>
 
-    <Color x:Key="Danger">#DC2626</Color>
+    <Color x:Key="Danger">#C8243B</Color>
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
     <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource Surface}" />
     <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource Border}" />
+
+    <!-- Serif font for headings ("Paw Rescue", "Luna", big numbers). Android ships Noto Serif as "serif". -->
+    <OnPlatform x:Key="SerifFont" x:TypeArguments="x:String">
+        <On Platform="Android" Value="serif" />
+        <On Platform="iOS, MacCatalyst" Value="Georgia" />
+        <On Platform="WinUI" Value="Georgia" />
+    </OnPlatform>
 </ResourceDictionary>

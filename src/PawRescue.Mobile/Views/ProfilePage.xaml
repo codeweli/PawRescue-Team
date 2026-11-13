@@ -7,106 +7,122 @@
                 x:DataType="vm:ProfileViewModel"
                 Shell.NavBarIsVisible="False">
 
-    <CollectionView ItemsSource="{Binding History}"
-                    ItemTemplate="{StaticResource ReportCardTemplate}"
-                    SelectionMode="Single"
-                    SelectedItem="{Binding SelectedReport}">
-        <CollectionView.Header>
-            <VerticalStackLayout Spacing="12">
+    <ScrollView>
+        <VerticalStackLayout Padding="16,16,16,24" Spacing="14">
+            <Label Text="{Binding Title}" Style="{StaticResource ScreenTitle}" />
 
-                <!-- Header band -->
-                <Grid HeightRequest="190" BackgroundColor="{StaticResource Primary}" Padding="16,24,16,0">
-                    <VerticalStackLayout HorizontalOptions="Center" Spacing="6">
-                        <Border WidthRequest="84" HeightRequest="84" StrokeShape="RoundRectangle 42" BackgroundColor="White" StrokeThickness="0">
-                            <Label Text="{Binding Initials}" FontSize="30" FontAttributes="Bold" TextColor="{StaticResource Primary}"
-                                   HorizontalOptions="Center" VerticalOptions="Center" />
-                        </Border>
-                        <Label Text="{Binding Profile.User.FullName}" TextColor="White" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
-                        <Border BackgroundColor="#33FFFFFF" StrokeThickness="0" StrokeShape="RoundRectangle 10" Padding="10,3" HorizontalOptions="Center">
-                            <Label Text="{Binding Profile.User.Role}" TextColor="White" FontSize="12" FontAttributes="Bold" />
-                        </Border>
+            <!-- Pink header card -->
+            <Border BackgroundColor="{StaticResource PrimaryLight}" StrokeThickness="0" StrokeShape="RoundRectangle 18" Padding="16,18">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                    <Border WidthRequest="64" HeightRequest="64" StrokeShape="RoundRectangle 32" StrokeThickness="0"
+                            BackgroundColor="{StaticResource Primary}">
+                        <Label Text="{Binding Initials}" FontFamily="{StaticResource SerifFont}" FontSize="24" FontAttributes="Bold"
+                               TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                        <Label Text="{Binding Profile.User.FullName}" Style="{StaticResource Title}" FontSize="21" />
+                        <Label Text="{Binding RoleText}" Style="{StaticResource Caption}" FontSize="14" />
                     </VerticalStackLayout>
                 </Grid>
+            </Border>
 
-                <!-- Contribution stats -->
-                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10" Margin="16,-36,16,0">
-                    <Border Style="{StaticResource StatCard}">
-                        <VerticalStackLayout HorizontalOptions="Center">
-                            <Label Text="{Binding Profile.Stats.ReportsSubmitted}" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" />
-                            <Label Text="Reports" Style="{StaticResource Caption}" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-                    </Border>
-                    <Border Grid.Column="1" Style="{StaticResource StatCard}">
-                        <VerticalStackLayout HorizontalOptions="Center">
-                            <Label Text="{Binding Profile.Stats.ReportsRescued}" FontSize="22" FontAttributes="Bold"
-                                   TextColor="{StaticResource StatusRescued}" HorizontalOptions="Center" />
-                            <Label Text="Saved" Style="{StaticResource Caption}" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-                    </Border>
-                    <Border Grid.Column="2" Style="{StaticResource StatCard}">
-                        <VerticalStackLayout HorizontalOptions="Center">
-                            <Label Text="{Binding Profile.Stats.RescuesCompleted}" FontSize="22" FontAttributes="Bold"
-                                   TextColor="{StaticResource Secondary}" HorizontalOptions="Center" />
-                            <Label Text="Rescues" Style="{StaticResource Caption}" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-                    </Border>
-                </Grid>
-
-                <!-- Account settings -->
-                <Border Style="{StaticResource Card}" Margin="16,0">
-                    <VerticalStackLayout Spacing="8">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <Label Text="Account settings" Style="{StaticResource SectionTitle}" Margin="0" />
-                            <Label Grid.Column="1" Text="Edit" Style="{StaticResource LinkLabel}" VerticalOptions="Center"
-                                   IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBool}}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding StartEditCommand}" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                        </Grid>
-
-                        <!-- Read mode -->
-                        <VerticalStackLayout Spacing="6" IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBool}}">
-                            <Label Text="{Binding Profile.User.Email, StringFormat='✉️  {0}'}" />
-                            <Label Text="{Binding Profile.User.PhoneNumber, StringFormat='📱  {0}', TargetNullValue='📱  No phone number'}" />
-                            <Label Text="{Binding Profile.User.CreatedAt, Converter={StaticResource UtcToLocal}, ConverterParameter='MMMM yyyy', StringFormat='🗓️  Member since {0}'}" />
-                        </VerticalStackLayout>
-
-                        <!-- Edit mode -->
-                        <VerticalStackLayout Spacing="6" IsVisible="{Binding IsEditing}">
-                            <Label Text="Full name" Style="{StaticResource FieldLabel}" />
-                            <Border Style="{StaticResource InputBorder}">
-                                <Entry Text="{Binding EditFullName}" />
-                            </Border>
-                            <Label Text="Mobile number" Style="{StaticResource FieldLabel}" />
-                            <Border Style="{StaticResource InputBorder}">
-                                <Entry Text="{Binding EditPhone}" Keyboard="Telephone" />
-                            </Border>
-                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,8,0,0">
-                                <Button Text="Cancel" Style="{StaticResource OutlineButton}" Command="{Binding CancelEditCommand}" />
-                                <Button Grid.Column="1" Text="Save" Command="{Binding SaveCommand}" />
-                            </Grid>
-                        </VerticalStackLayout>
+            <!-- Stats -->
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                <Border Style="{StaticResource StatCard}" Padding="8,14">
+                    <VerticalStackLayout>
+                        <Label Text="{Binding Profile.Stats.ReportsSubmitted}" Style="{StaticResource StatNumber}" FontSize="22" />
+                        <Label Text="Reports" Style="{StaticResource StatLabel}" />
                     </VerticalStackLayout>
                 </Border>
+                <Border Grid.Column="1" Style="{StaticResource StatCard}" Padding="8,14">
+                    <VerticalStackLayout>
+                        <Label Text="{Binding Profile.Stats.RescuesCompleted}" Style="{StaticResource StatNumber}" FontSize="22" />
+                        <Label Text="Assists" Style="{StaticResource StatLabel}" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource StatCard}" Padding="8,14">
+                    <VerticalStackLayout>
+                        <Label Text="{Binding Profile.Stats.ReportsRescued}" Style="{StaticResource StatNumber}" FontSize="22" />
+                        <Label Text="Rescued" Style="{StaticResource StatLabel}" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
 
-                <VerticalStackLayout Padding="16,0" Spacing="10">
-                    <Button Text="🦺  Volunteer Dashboard" Style="{StaticResource SecondaryButton}"
-                            IsVisible="{Binding IsVolunteer}" Command="{Binding OpenVolunteerDashboardCommand}" />
-                    <Button Text="🛠️  Admin Dashboard" Style="{StaticResource OutlineButton}"
-                            IsVisible="{Binding IsAdmin}" Command="{Binding OpenAdminDashboardCommand}" />
-                    <Button Text="Log out" Style="{StaticResource DangerButton}" Command="{Binding LogoutCommand}" />
+            <!-- Edit profile (shown after tapping "Edit profile") -->
+            <Border Style="{StaticResource Card}" Padding="16" IsVisible="{Binding IsEditing}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Edit profile" Style="{StaticResource SectionTitle}" Margin="0" />
+                    <Label Text="Full name" Style="{StaticResource FieldLabel}" />
+                    <Border Style="{StaticResource InputBorder}">
+                        <Entry Text="{Binding EditFullName}" />
+                    </Border>
+                    <Label Text="Mobile number" Style="{StaticResource FieldLabel}" />
+                    <Border Style="{StaticResource InputBorder}">
+                        <Entry Text="{Binding EditPhone}" Keyboard="Telephone" />
+                    </Border>
+                    <Label Text="{Binding Profile.User.Email, StringFormat='Email: {0}'}" Style="{StaticResource Caption}" Margin="2,4,0,0" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,8,0,0">
+                        <Button Text="Cancel" Style="{StaticResource OutlineButton}" Command="{Binding CancelEditCommand}" />
+                        <Button Grid.Column="1" Text="Save" Command="{Binding SaveCommand}" />
+                    </Grid>
                 </VerticalStackLayout>
+            </Border>
 
-                <Label Text="My report history" Style="{StaticResource SectionTitle}" Margin="16,8,16,0" />
-            </VerticalStackLayout>
-        </CollectionView.Header>
+            <!-- Menu -->
+            <Border Style="{StaticResource Card}" Padding="0">
+                <VerticalStackLayout Spacing="0">
+                        <Grid ColumnDefinitions="*,Auto" Padding="16,16" BackgroundColor="White">
+                            <Label Text="My reports" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                            <Image Grid.Column="1" Source="icon_chevron.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenMyReportsCommand}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                        <BoxView Style="{StaticResource Divider}" Margin="16,0" />
+                        <Grid ColumnDefinitions="*,Auto" Padding="16,16" BackgroundColor="White">
+                            <Label Text="Edit profile" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                            <Image Grid.Column="1" Source="icon_chevron.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding StartEditCommand}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                        <BoxView Style="{StaticResource Divider}" Margin="16,0" />
+                        <Grid ColumnDefinitions="*,Auto" Padding="16,16" BackgroundColor="White">
+                            <Label Text="Notification settings" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                            <Image Grid.Column="1" Source="icon_chevron.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenNotificationSettingsCommand}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                        <BoxView Style="{StaticResource Divider}" Margin="16,0" />
+                        <Grid ColumnDefinitions="*,Auto" Padding="16,16" BackgroundColor="White">
+                            <Label Text="Help and safety tips" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                            <Image Grid.Column="1" Source="icon_chevron.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenSafetyTipsCommand}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                        <BoxView Style="{StaticResource Divider}" Margin="16,0"  IsVisible="{Binding IsVolunteer}" />
+                        <Grid ColumnDefinitions="*,Auto" Padding="16,16" BackgroundColor="White" IsVisible="{Binding IsVolunteer}">
+                            <Label Text="Volunteer dashboard" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                            <Image Grid.Column="1" Source="icon_chevron.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenVolunteerDashboardCommand}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                        <BoxView Style="{StaticResource Divider}" Margin="16,0"  IsVisible="{Binding IsAdmin}" />
+                        <Grid ColumnDefinitions="*,Auto" Padding="16,16" BackgroundColor="White" IsVisible="{Binding IsAdmin}">
+                            <Label Text="Admin dashboard" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                            <Image Grid.Column="1" Source="icon_chevron.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenAdminDashboardCommand}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                </VerticalStackLayout>
+            </Border>
 
-        <CollectionView.EmptyView>
-            <Label Text="You haven't reported any animals yet." Style="{StaticResource Caption}" HorizontalOptions="Center" Margin="24" />
-        </CollectionView.EmptyView>
-        <CollectionView.Footer>
-            <BoxView HeightRequest="24" Color="Transparent" />
-        </CollectionView.Footer>
-    </CollectionView>
+            <Button Text="Log out" Style="{StaticResource DangerButton}" Command="{Binding LogoutCommand}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
 </views:BasePage>

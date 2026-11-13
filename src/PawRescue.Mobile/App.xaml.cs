@@ -2,14 +2,13 @@ namespace PawRescue.Mobile;
 
 public partial class App : Application
 {
-    private readonly AppShell _shell;
-
-    public App(AppShell shell)
+    public App()
     {
-        InitializeComponent();
-        _shell = shell;
-        UserAppTheme = AppTheme.Light; // the Figma design is light-only
+        InitializeComponent(); // loads Colors.xaml / Styles.xaml FIRST
+        UserAppTheme = AppTheme.Light; // the design is light-only
     }
 
-    protected override Window CreateWindow(IActivationState? activationState) => new(_shell);
+    // AppShell is created here (after the resources above are loaded),
+    // otherwise its StaticResource lookups like "BaseShell" fail.
+    protected override Window CreateWindow(IActivationState? activationState) => new(new AppShell());
 }

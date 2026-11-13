@@ -18,8 +18,8 @@
         <Tab Title="Map" Icon="tab_map.png">
             <ShellContent Route="map" ContentTemplate="{DataTemplate views:MapPage}" />
         </Tab>
-        <Tab Title="Report" Icon="tab_report.png">
-            <ShellContent Route="report" ContentTemplate="{DataTemplate views:ReportAnimalPage}" />
+        <Tab Title="Reports" Icon="tab_list.png">
+            <ShellContent Route="reports" ContentTemplate="{DataTemplate views:RescueCasesPage}" />
         </Tab>
         <Tab Title="Alerts" Icon="tab_bell.png">
             <ShellContent Route="notifications" ContentTemplate="{DataTemplate views:NotificationsPage}" />

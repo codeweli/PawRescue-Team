@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:BasePage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:views="clr-namespace:PawRescue.Mobile.Views"
+                xmlns:vm="clr-namespace:PawRescue.Mobile.ViewModels"
+                x:Class="PawRescue.Mobile.Views.NotificationSettingsPage"
+                x:DataType="vm:NotificationSettingsViewModel"
+                Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16,8,16,24" Spacing="14">
+
+            <!-- Nearby alerts (volunteers only) -->
+            <Border Style="{StaticResource Card}" Padding="16" IsVisible="{Binding IsVolunteer}">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="New report nearby alerts" FontAttributes="Bold" FontSize="15" />
+                        <Label Text="Share your location with Paw Rescue so you're told when an animal is reported within 5 km of you."
+                               Style="{StaticResource Caption}" />
+                    </VerticalStackLayout>
+                    <Switch Grid.Column="1" IsToggled="{Binding NearbyAlertsEnabled}" OnColor="{StaticResource Primary}"
+                            ThumbColor="White" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <!-- Home radius -->
+            <Border Style="{StaticResource Card}" Padding="16">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="&quot;Needs help nearby&quot; distance" FontAttributes="Bold" FontSize="15" />
+                    <Label Text="How far the Home screen looks for animals that need help." Style="{StaticResource Caption}" />
+                    <Border Style="{StaticResource InputBorder}">
+                        <Picker ItemsSource="{Binding RadiusOptions}" SelectedItem="{Binding SelectedRadius}" Title="Distance" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Phone notification permission -->
+            <Border Style="{StaticResource Card}" Padding="16">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Push notifications" FontAttributes="Bold" FontSize="15" />
+                    <Label Text="Rescue updates for your reports always appear in the Alerts tab. To turn phone pop-ups on or off, use your phone's settings."
+                           Style="{StaticResource Caption}" />
+                    <Button Text="Open phone settings" Style="{StaticResource OutlineButton}" Command="{Binding OpenPhoneSettingsCommand}" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</views:BasePage>

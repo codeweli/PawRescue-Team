@@ -33,6 +33,22 @@ public partial class MapViewModel : BaseViewModel
     [ObservableProperty] private string searchText = string.Empty;
     [ObservableProperty] private string resultText = string.Empty;
 
+    /// <summary>The report shown in the bottom preview card (null = card hidden).</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasSelection))]
+    private MapPinItem? selectedPin;
+
+    public bool HasSelection => SelectedPin is not null;
+
+    /// <summary>Legend shown in the top-left corner of the map.</summary>
+    public LegendItem[] Legend { get; } =
+    {
+        new(Needs.MapLabel(NeedCategory.Medical), Needs.ColorOf(NeedCategory.Medical)),
+        new(Needs.MapLabel(NeedCategory.Food), Needs.ColorOf(NeedCategory.Food)),
+        new(Needs.MapLabel(NeedCategory.Shelter), Needs.ColorOf(NeedCategory.Shelter)),
+        new(Needs.MapLabel(NeedCategory.Provided), Needs.ColorOf(NeedCategory.Provided))
+    };
+
     private GeoPoint _center = new(14.8136, 121.0453); // default center until GPS answers
     private double _radiusKm = 5;
 
@@ -99,6 +115,30 @@ public partial class MapViewModel : BaseViewModel
     [RelayCommand]
     private Task SearchAsync() => LoadAsync();
 
+    /// <summary>Called when a pin is tapped: single report → preview card, cluster → zoom in.</summary>
+    public async Task SelectPinAsync(MapPinItem pin)
+    {
+        if (pin.IsCluster || pin.ReportId is null)
+        {
+            SelectedPin = null;
+            await OpenPinAsync(pin);
+        }
+        else
+        {
+            SelectedPin = pin;
+        }
+    }
+
+    [RelayCommand]
+    private void ClosePreview() => SelectedPin = null;
+
+    [RelayCommand]
+    private async Task ViewDetailsAsync()
+    {
+        if (SelectedPin?.ReportId is { } id)
+            await Shell.Current.GoToAsync("reportdetails", new Dictionary<string, object> { ["id"] = id });
+    }
+
     /// <summary>Called when the user taps a pin's info window.</summary>
     public async Task OpenPinAsync(MapPinItem pin)
     {
@@ -115,6 +155,7 @@ public partial class MapViewModel : BaseViewModel
 
     private void RebuildPins()
     {
+        SelectedPin = null;
         Pins.Clear();
         foreach (var pin in MarkerClusterer.Cluster(_loaded, _radiusKm)) Pins.Add(pin);
         ResultText = _loaded.Count == 0 ? "No reports in this area" : $"{_loaded.Count} report(s) in view";
@@ -131,3 +172,5 @@ public partial class MapViewModel : BaseViewModel
     //   ("Open" and "All" stay null — LoadAsync sends openOnly = true for "Open".)
     private ReportStatus? StatusFilter() => null;
 }
+
+public record LegendItem(string Label, Color Color);

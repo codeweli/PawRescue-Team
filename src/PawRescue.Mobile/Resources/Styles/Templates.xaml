@@ -4,12 +4,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:m="clr-namespace:PawRescue.Mobile.Models">
 
+    <!-- Report card (Home "Needs help nearby", Rescue Cases, Volunteer, Admin) -->
     <DataTemplate x:Key="ReportCardTemplate" x:DataType="m:ReportSummaryDto">
         <Grid Padding="16,6" Style="{StaticResource NoSelectionHighlight}">
             <Border Style="{StaticResource Card}" Padding="10">
-                <Grid ColumnDefinitions="88,*" ColumnSpacing="12">
-                    <!-- Thumbnail -->
-                    <Border StrokeThickness="0" StrokeShape="RoundRectangle 14" HeightRequest="88" WidthRequest="88"
+                <Grid ColumnDefinitions="96,*" ColumnSpacing="14">
+                    <!-- Photo -->
+                    <Border StrokeThickness="0" StrokeShape="RoundRectangle 12" HeightRequest="96" WidthRequest="96"
                             BackgroundColor="{StaticResource SurfaceMuted}">
                         <Grid>
                             <Label Text="{Binding AnimalEmoji}" FontSize="34" HorizontalOptions="Center" VerticalOptions="Center" />
@@ -17,23 +18,38 @@
                         </Grid>
                     </Border>
 
-                    <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                        <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="15" MaxLines="1" LineBreakMode="TailTruncation" />
-                        <Label Text="{Binding Address}" Style="{StaticResource Caption}" MaxLines="1" LineBreakMode="TailTruncation" />
-                        <HorizontalStackLayout Spacing="6">
-                            <Border Style="{StaticResource Badge}" BackgroundColor="{Binding Severity, Converter={StaticResource SeverityToColor}}">
-                                <Label Text="{Binding Severity}" Style="{StaticResource BadgeText}" />
+                    <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="3" VerticalOptions="Center">
+                        <!-- Name + badge -->
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="6">
+                            <Label Text="{Binding Title}" Style="{StaticResource CardName}" VerticalOptions="Center" />
+                            <Border Grid.Column="1" Style="{StaticResource StatusPill}">
+                                <Border.Triggers>
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsHighPriority}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                    </DataTrigger>
+                                </Border.Triggers>
+                                <Label Text="{Binding BadgeText}" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsHighPriority}" Value="True">
+                                            <Setter Property="TextColor" Value="White" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
                             </Border>
-                            <Border Style="{StaticResource Badge}" BackgroundColor="{Binding Status, Converter={StaticResource StatusToColor}}">
-                                <Label Text="{Binding Status, Converter={StaticResource EnumToText}}" Style="{StaticResource BadgeText}" />
-                            </Border>
+                        </Grid>
+
+                        <Label Grid.Row="1" Text="{Binding AnimalType}" Style="{StaticResource Caption}" Margin="0,0,0,6" />
+
+                        <HorizontalStackLayout Grid.Row="2" Spacing="6">
+                            <Image Source="icon_pin_dark.png" WidthRequest="15" HeightRequest="15" VerticalOptions="Center" />
+                            <Label Text="{Binding LocationText}" FontSize="14" MaxLines="1" LineBreakMode="TailTruncation" VerticalOptions="Center" />
                         </HorizontalStackLayout>
-                        <HorizontalStackLayout Spacing="10">
-                            <Label Text="{Binding DistanceText}" Style="{StaticResource Caption}" TextColor="{StaticResource Primary}"
-                                   IsVisible="{Binding DistanceText, Converter={StaticResource IsNotNull}}" />
-                            <Label Text="{Binding CreatedAt, Converter={StaticResource UtcToLocal}}" Style="{StaticResource Caption}" />
+
+                        <HorizontalStackLayout Grid.Row="3" Spacing="8">
+                            <BoxView Color="{Binding NeedColor}" WidthRequest="9" HeightRequest="9" CornerRadius="4.5" VerticalOptions="Center" />
+                            <Label Text="{Binding NeedText}" FontSize="14" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
                         </HorizontalStackLayout>
-                    </VerticalStackLayout>
+                    </Grid>
                 </Grid>
             </Border>
         </Grid>

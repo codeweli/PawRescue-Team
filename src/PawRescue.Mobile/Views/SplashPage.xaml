@@ -16,7 +16,7 @@
 
         <VerticalStackLayout Grid.Row="2" Spacing="6" Margin="0,24,0,0">
             <Label Text="Paw Rescue" FontSize="34" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" />
-            <Label Text="Every paw deserves a second chance" FontSize="15" TextColor="#FFEDD5" HorizontalOptions="Center" />
+            <Label Text="Every paw deserves a second chance" FontSize="15" TextColor="#FCE8EA" HorizontalOptions="Center" />
         </VerticalStackLayout>
 
         <ActivityIndicator Grid.Row="4" IsRunning="True" Color="White" Margin="0,0,0,32" />

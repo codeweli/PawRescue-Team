@@ -91,6 +91,9 @@ public record SearchQuery(
     int Page = 1,
     int PageSize = 20);
 
+/// <summary>Numbers shown on the Home screen stats card.</summary>
+public record CommunityStatsDto(int AnimalsReported, int AnimalsHelped, int ActiveCases);
+
 public record PagedResult<T>(IReadOnlyList<T> Items, int Page, int PageSize, int TotalCount)
 {
     public int TotalPages => (int)Math.Ceiling(TotalCount / (double)Math.Max(PageSize, 1));

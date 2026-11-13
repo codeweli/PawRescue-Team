@@ -8,6 +8,10 @@
                 x:DataType="vm:ReportDetailsViewModel"
                 Title="{Binding Title}">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Share" IconImageSource="icon_share.png" Command="{Binding ShareCommand}" />
+    </ContentPage.ToolbarItems>
+
     <Grid RowDefinitions="*,Auto">
         <ScrollView>
             <VerticalStackLayout Spacing="0" IsVisible="{Binding Report, Converter={StaticResource IsNotNull}}">

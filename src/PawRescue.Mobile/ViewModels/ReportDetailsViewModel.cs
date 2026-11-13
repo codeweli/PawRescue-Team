@@ -145,6 +145,18 @@ public partial class ReportDetailsViewModel : BaseViewModel, IQueryAttributable
         await Shell.Current.GoToAsync("..");
     });
 
+    /// <summary>Share the report through Messenger, SMS, etc. so more people can help.</summary>
+    [RelayCommand]
+    private async Task ShareAsync()
+    {
+        if (Report is null) return;
+        var mapLink = $"https://maps.google.com/?q={Report.Location.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
+                      $"{Report.Location.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}";
+        var text = $"🐾 {Report.Title} ({Report.AnimalType}) needs help: {Needs.CardLabel(Report.Condition, Report.Status)}.\n" +
+                   $"📍 {Report.Location.Address ?? "See map"}\n{mapLink}\nReported on Paw Rescue.";
+        await Share.Default.RequestAsync(new ShareTextRequest { Title = "Share this report", Text = text });
+    }
+
     [RelayCommand]
     private async Task OpenDirectionsAsync()
     {

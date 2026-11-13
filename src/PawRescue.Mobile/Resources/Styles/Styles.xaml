@@ -8,21 +8,55 @@
         <Setter Property="FontSize" Value="15" />
     </Style>
     <Style x:Key="Headline" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource SerifFont}" />
         <Setter Property="FontSize" Value="28" />
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
     </Style>
     <Style x:Key="Title" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource SerifFont}" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
     </Style>
     <Style x:Key="SectionTitle" TargetType="Label">
-        <Setter Property="FontSize" Value="17" />
+        <Setter Property="FontFamily" Value="{StaticResource SerifFont}" />
+        <Setter Property="FontSize" Value="19" />
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
         <Setter Property="Margin" Value="0,8,0,4" />
     </Style>
+    <!-- Big serif page title: "Rescue Map", "Notifications", "Profile" -->
+    <Style x:Key="ScreenTitle" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource SerifFont}" />
+        <Setter Property="FontSize" Value="28" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+    </Style>
+    <!-- Animal name on cards: "Luna", "Brownie" -->
+    <Style x:Key="CardName" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource SerifFont}" />
+        <Setter Property="FontSize" Value="19" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="MaxLines" Value="1" />
+        <Setter Property="LineBreakMode" Value="TailTruncation" />
+    </Style>
+    <!-- Big red numbers: 128 / 94 / 21 -->
+    <Style x:Key="StatNumber" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource SerifFont}" />
+        <Setter Property="FontSize" Value="26" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="{StaticResource Primary}" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+    </Style>
+    <Style x:Key="StatLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
     <Style x:Key="Body" TargetType="Label">
         <Setter Property="FontSize" Value="15" />
         <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
@@ -145,10 +179,10 @@
         <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
         <Setter Property="Stroke" Value="{StaticResource Border}" />
         <Setter Property="StrokeThickness" Value="1" />
-        <Setter Property="StrokeShape" Value="RoundRectangle 18" />
-        <Setter Property="Padding" Value="14" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+        <Setter Property="Padding" Value="12" />
         <Setter Property="Shadow">
-            <Shadow Brush="#33000000" Offset="0,3" Radius="10" Opacity="0.12" />
+            <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.06" />
         </Setter>
     </Style>
     <Style x:Key="StatCard" TargetType="Border" BasedOn="{StaticResource Card}">
@@ -168,10 +202,44 @@
         <Setter Property="FontAttributes" Value="Bold" />
     </Style>
     <Style x:Key="Chip" TargetType="Border">
-        <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
-        <Setter Property="Stroke" Value="{StaticResource Border}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource SurfaceMuted}" />
+        <Setter Property="Stroke" Value="Transparent" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 20" />
+        <Setter Property="Padding" Value="16,9" />
+    </Style>
+
+    <!-- Home quick-action tiles -->
+    <Style x:Key="ActionTile" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryLight}" />
+        <Setter Property="StrokeThickness" Value="0" />
         <Setter Property="StrokeShape" Value="RoundRectangle 18" />
-        <Setter Property="Padding" Value="14,8" />
+        <Setter Property="Padding" Value="14" />
+        <Setter Property="HeightRequest" Value="104" />
+    </Style>
+
+    <!-- Rounded grey search field -->
+    <Style x:Key="SearchField" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource SurfaceMuted}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+        <Setter Property="Padding" Value="14,0" />
+        <Setter Property="HeightRequest" Value="50" />
+    </Style>
+
+    <!-- Status pill on cards ("• Open") -->
+    <Style x:Key="StatusPill" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource SurfaceMuted}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+        <Setter Property="Padding" Value="10,4" />
+        <Setter Property="VerticalOptions" Value="Start" />
+        <Setter Property="HorizontalOptions" Value="End" />
+    </Style>
+
+    <!-- Plain white list row with a hairline divider (notifications, profile menu) -->
+    <Style x:Key="Divider" TargetType="BoxView">
+        <Setter Property="HeightRequest" Value="1" />
+        <Setter Property="Color" Value="{StaticResource Border}" />
     </Style>
 
     <Style TargetType="ActivityIndicator">

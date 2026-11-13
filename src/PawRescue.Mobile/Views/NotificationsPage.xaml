@@ -6,46 +6,51 @@
                 xmlns:m="clr-namespace:PawRescue.Mobile.Models"
                 x:Class="PawRescue.Mobile.Views.NotificationsPage"
                 x:DataType="vm:NotificationsViewModel"
-                Title="{Binding Title}">
+                Shell.NavBarIsVisible="False">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Mark all read" Command="{Binding MarkAllReadCommand}" />
-    </ContentPage.ToolbarItems>
+    <Grid RowDefinitions="Auto,*">
+        <Grid ColumnDefinitions="*,Auto" Padding="16,16,16,8">
+            <Label Text="{Binding Title}" Style="{StaticResource ScreenTitle}" VerticalOptions="Center" />
+            <Label Grid.Column="1" Text="Mark all read" Style="{StaticResource LinkLabel}" FontSize="13" VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding MarkAllReadCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
 
-    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding LoadCommand}">
-        <CollectionView ItemsSource="{Binding Items}" SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
-            <CollectionView.Header>
-                <BoxView HeightRequest="8" Color="Transparent" />
-            </CollectionView.Header>
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="m:NotificationDto">
-                    <Grid Padding="16,4" Style="{StaticResource NoSelectionHighlight}">
-                        <Border Style="{StaticResource Card}" BackgroundColor="{Binding IsRead, Converter={StaticResource ReadToBackground}}">
-                            <Grid ColumnDefinitions="44,*,Auto" ColumnSpacing="12">
+        <RefreshView Grid.Row="1" IsRefreshing="{Binding IsRefreshing}" Command="{Binding LoadCommand}">
+            <CollectionView ItemsSource="{Binding Items}" SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="m:NotificationDto">
+                        <Grid RowDefinitions="*,1" Style="{StaticResource NoSelectionHighlight}">
+                            <Grid ColumnDefinitions="48,*,Auto" ColumnSpacing="14" Padding="16,16">
+                                <!-- Round tinted icon -->
                                 <Border WidthRequest="44" HeightRequest="44" StrokeShape="RoundRectangle 22" StrokeThickness="0"
-                                        BackgroundColor="{StaticResource PrimaryLight}" VerticalOptions="Start">
-                                    <Label Text="{Binding Icon}" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                        BackgroundColor="{Binding IconBackground}" VerticalOptions="Start">
+                                    <Image Source="{Binding IconImage}" WidthRequest="20" HeightRequest="20" />
                                 </Border>
-                                <VerticalStackLayout Grid.Column="1" Spacing="2">
-                                    <Label Text="{Binding Title}" FontAttributes="Bold" />
-                                    <Label Text="{Binding Message}" Style="{StaticResource Caption}" FontSize="14" />
-                                    <Label Text="{Binding CreatedAt, Converter={StaticResource UtcToLocal}}" Style="{StaticResource Caption}" FontSize="11" />
+                                <VerticalStackLayout Grid.Column="1" Spacing="3">
+                                    <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="15" />
+                                    <Label Text="{Binding Message}" FontSize="14" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Text="{Binding TimeAgo}" FontSize="12" TextColor="{StaticResource TextSecondary}" Margin="0,2,0,0" />
                                 </VerticalStackLayout>
-                                <Border Grid.Column="2" WidthRequest="10" HeightRequest="10" StrokeShape="RoundRectangle 5" StrokeThickness="0"
-                                        BackgroundColor="{StaticResource Primary}" VerticalOptions="Start"
-                                        IsVisible="{Binding IsRead, Converter={StaticResource InvertedBool}}" />
+                                <!-- Unread dot -->
+                                <BoxView Grid.Column="2" Color="{StaticResource Primary}" WidthRequest="9" HeightRequest="9" CornerRadius="4.5"
+                                         VerticalOptions="Start" Margin="0,6,0,0"
+                                         IsVisible="{Binding IsRead, Converter={StaticResource InvertedBool}}" />
                             </Grid>
-                        </Border>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-            <CollectionView.EmptyView>
-                <VerticalStackLayout Padding="32" Spacing="6" HorizontalOptions="Center">
-                    <Label Text="🔔" FontSize="44" HorizontalOptions="Center" />
-                    <Label Text="You're all caught up" Style="{StaticResource SectionTitle}" HorizontalOptions="Center" />
-                    <Label Text="Rescue updates and nearby alerts will show up here." Style="{StaticResource Caption}" HorizontalOptions="Center" />
-                </VerticalStackLayout>
-            </CollectionView.EmptyView>
-        </CollectionView>
-    </RefreshView>
+                            <BoxView Grid.Row="1" Style="{StaticResource Divider}" Margin="16,0" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="32" Spacing="6" HorizontalOptions="Center">
+                        <Image Source="icon_bell_small.png" WidthRequest="40" HeightRequest="40" />
+                        <Label Text="You're all caught up" Style="{StaticResource SectionTitle}" HorizontalOptions="Center" />
+                        <Label Text="Rescue updates and nearby alerts will show up here." Style="{StaticResource Caption}" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
 </views:BasePage>
