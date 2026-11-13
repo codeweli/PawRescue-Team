@@ -120,16 +120,6 @@ public static class Needs
         NeedCategory.Provided => Color.FromArgb("#2E9E5B"),
         _ => Color.FromArgb("#8A8486")
     };
-
-    /// <summary>Google Maps marker hue (0–360) that matches ColorOf.</summary>
-    public static float HueOf(NeedCategory need) => need switch
-    {
-        NeedCategory.Medical => 355f,
-        NeedCategory.Food => 28f,
-        NeedCategory.Shelter => 50f,
-        NeedCategory.Provided => 140f,
-        _ => 210f
-    };
 }
 
 public record CommunityStatsDto(int AnimalsReported, int AnimalsHelped, int ActiveCases);
@@ -227,7 +217,6 @@ public class MapPinItem
     public bool IsCluster => Count > 1;
 
     // Used by the colored marker and the bottom preview card on the Map screen
-    public float Hue { get; init; } = 355f;
     public string Name { get; init; } = string.Empty;
     public string Subtitle { get; init; } = string.Empty;
     public string NeedText { get; init; } = string.Empty;

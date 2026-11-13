@@ -70,7 +70,7 @@ public partial class HomeViewModel : BaseViewModel
 
     private async Task LoadCoreAsync()
     {
-        var here = await _location.GetCurrentAsync();
+        var here = await _location.GetCurrentInPhilippinesAsync();   // null if GPS is off or outside PH
         if (here is null)
         {
             NearbyTitle = "Latest reports";

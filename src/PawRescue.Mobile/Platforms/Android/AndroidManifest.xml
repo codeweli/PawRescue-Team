@@ -3,8 +3,6 @@
 	<!-- usesCleartextTraffic lets the debug app call the local API over http://10.0.2.2. Remove for production (use HTTPS). -->
 	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round"
 	             android:supportsRtl="true" android:usesCleartextTraffic="true">
-		<!-- Google Maps key: https://console.cloud.google.com → Maps SDK for Android -->
-		<meta-data android:name="com.google.android.geo.API_KEY" android:value="YOUR_GOOGLE_MAPS_API_KEY" />
 	</application>
 
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -27,6 +25,10 @@
 		<intent>
 			<action android:name="android.intent.action.VIEW" />
 			<data android:scheme="geo" />
+		</intent>
+		<intent>
+			<action android:name="android.intent.action.VIEW" />
+			<data android:scheme="https" />
 		</intent>
 	</queries>
 </manifest>

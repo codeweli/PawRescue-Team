@@ -1,5 +1,32 @@
 # Changelog
 
+## Sample data moved to San Pablo City, Laguna (Nov 13, 2026)
+- All 9 demo reports are now in **San Pablo City, Laguna** (cathedral, old city hall, Sampaloc Lake, public market, Brgy. San Marcos).
+- **4 sample cats with real photos** (`wwwroot/samples/`): Kuting, Luna, Bella, Mingming. They're the newest, so they show first.
+- The map starts on San Pablo City when GPS is off or outside the Philippines.
+- Old demo reports from the earlier Philippines-wide sample set are **removed automatically** on the next API start (your own reports are never touched).
+
+## Directions, your location, route on the map, sample photos (Nov 13, 2026)
+- **Fixed misleading directions:** "Directions" used to pass the animal's *name* to Google Maps, which searched it as a place (e.g. "Luna" is also a town in La Union). It now opens Google Maps with the **exact coordinates**, starting from **your current GPS position**.
+- **Blue "you are here" dot** on the Rescue Map.
+- **Route inside the app:** on the map preview card, **Directions** draws the road route from you to the animal (free OSRM routing, no key) and shows the distance and drive time. **Navigate** then opens turn-by-turn directions in Google Maps.
+- **Sample photos:** put `luna.jpg`, `brownie.jpg`, `max.jpg`, `bella.jpg` in `src/PawRescue.Api/wwwroot/samples/` and restart the API; they're attached to those sample reports automatically. These 4 samples are now the newest, so they show first.
+- New package: `Mapsui.Nts` (draws lines on the map).
+
+## Map fixes, place search, Philippine sample data (Nov 13, 2026)
+- **Map stays on the Philippines:** can't pan outside the country or zoom out past it. GPS outside the Philippines (like the emulator's default California location) is ignored, and the map starts in Manila.
+- **Search bar finds places:** typing a place ("Muñoz", "SM North EDSA", "Cebu City") moves the map there, using OpenStreetMap's free Nominatim search limited to the Philippines. If no place matches, it searches reports instead.
+- **Less buggy map:** pins redraw once per reload instead of once per pin (stops flicker), and the preview card no longer closes by itself after the map reloads.
+- **Addresses** for new reports now come from OpenStreetMap (works on the emulator), with the phone's geocoder as a fallback.
+- **Sample data:** an empty database is filled with 12 demo reports in real Philippine places (Muñoz, Cabanatuan, Palayan, Tarlac, Quezon City, Manila, Makati, Baguio, Cebu, Iloilo, Davao), plus demo accounts `reporter@pawrescue.local` / `volunteer@pawrescue.local` (password `Demo@12345`). Turn off with `"Seed": { "SampleData": false }`.
+
+## Map switched to OpenStreetMap (Nov 13, 2026)
+- Replaced Google Maps (`Microsoft.Maui.Controls.Maps`) with **OpenStreetMap through Mapsui** (`Mapsui.Maui`). It's free and needs **no API key and no credit card**.
+- `MauiProgram.cs`: `.UseMauiMaps()` → `.UseSkiaSharp()`; removed the Google pin-color code and `Controls/ColoredPin.cs`.
+- `AndroidManifest.xml`: removed the Google Maps API key line.
+- `Views/MapPage.xaml(.cs)`: new map control, colored report dots, tap a dot → preview card, "© OpenStreetMap contributors" credit.
+- `MapViewModel` is unchanged, so Member 3's filter/clustering TODOs work exactly the same.
+
 ## UI redesign + fixes (Nov 13, 2026)
 
 ### Fixed
@@ -14,7 +41,7 @@
 - Bottom tabs are now **Home · Map · Reports · Alerts · Profile**. Reporting an animal opens from the Home tile or the red **+** on Reports.
 - **Home:** logo + greeting header, bell with unread dot, search bar, 3 action tiles, community stats card, "Needs help nearby" cards.
 - **Report cards:** photo, animal name, type, location, colored need dot ("Medical Treatment", "Food and Water", …) and a "! High Priority" / "• Open" badge.
-- **Rescue Map:** rounded map, colored pins (red medical, orange food, yellow shelter, green helped), legend, and a bottom preview card with "View details".
+- **Rescue Map:** rounded map, colored dots (red medical, orange food, yellow shelter, green helped), legend, and a bottom preview card with "View details".
 - **Rescue Cases (new tab):** filter chips (All, High Priority, Open, Dogs, Cats, Birds, Rescued, My reports) + search.
 - **Notifications:** tinted round icons, "12 min ago" times, unread dots, dividers.
 - **Profile:** pink header card, Reports / Assists / Rescued stats, menu list.

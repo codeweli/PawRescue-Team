@@ -29,7 +29,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-    <PackageReference Include="Microsoft.Maui.Controls.Maps" Version="$(MauiVersion)" />
+    <!-- OpenStreetMap map control (free, no API key or billing needed) -->
+    <PackageReference Include="Mapsui.Maui" Version="5.*" />
+    <!-- Lines on the map (the route to an animal) -->
+    <PackageReference Include="Mapsui.Nts" Version="5.*" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.*" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.*" />

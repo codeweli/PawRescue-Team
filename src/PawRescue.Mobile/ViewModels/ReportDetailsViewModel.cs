@@ -27,8 +27,14 @@ public partial class ReportDetailsViewModel : BaseViewModel, IQueryAttributable
     private readonly TokenStore _tokens;
     private Guid _id;
 
-    public ReportDetailsViewModel(IReportApi reports, IRescueApi rescues, TokenStore tokens, IDialogService dialogs) : base(dialogs)
+    private readonly ILocationService _location;
+    private readonly IDirectionsService _directions;
+
+    public ReportDetailsViewModel(IReportApi reports, IRescueApi rescues, TokenStore tokens,
+                                  ILocationService location, IDirectionsService directions, IDialogService dialogs) : base(dialogs)
     {
+        _location = location;
+        _directions = directions;
         _reports = reports;
         _rescues = rescues;
         _tokens = tokens;
@@ -161,9 +167,17 @@ public partial class ReportDetailsViewModel : BaseViewModel, IQueryAttributable
     private async Task OpenDirectionsAsync()
     {
         if (Report is null) return;
-        var loc = new Location(Report.Location.Latitude, Report.Location.Longitude);
-        await Microsoft.Maui.ApplicationModel.Map.Default.OpenAsync(loc,
-            new MapLaunchOptions { Name = Report.Title, NavigationMode = Microsoft.Maui.ApplicationModel.NavigationMode.Driving });
+        // Start from the phone's real position (if it's in the Philippines) and go to the report's exact coordinates.
+        var from = await _location.GetCurrentInPhilippinesAsync();
+        var to = new GeoPoint(Report.Location.Latitude, Report.Location.Longitude);
+        try
+        {
+            await _directions.OpenNavigationAsync(from, to);
+        }
+        catch
+        {
+            await Dialogs.AlertAsync("Can't open maps", "No maps app or browser could open the directions.");
+        }
     }
 
     /// <summary>FUTURE FEATURE — the API returns 501 until the AI model is integrated.</summary>

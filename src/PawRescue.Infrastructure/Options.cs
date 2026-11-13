@@ -40,4 +40,6 @@ public class SeedOptions
     public const string Section = "Seed";
     public string AdminEmail { get; set; } = "admin@pawrescue.local";
     public string AdminPassword { get; set; } = string.Empty;
+    /// <summary>Fill an empty database with demo reports in the Philippines (see SampleDataSeeder).</summary>
+    public bool SampleData { get; set; }
 }
