@@ -29,10 +29,13 @@ public partial class ReportDetailsViewModel : BaseViewModel, IQueryAttributable
 
     private readonly ILocationService _location;
     private readonly IDirectionsService _directions;
+    private readonly MapViewModel _map;
 
     public ReportDetailsViewModel(IReportApi reports, IRescueApi rescues, TokenStore tokens,
-                                  ILocationService location, IDirectionsService directions, IDialogService dialogs) : base(dialogs)
+                                  ILocationService location, IDirectionsService directions, MapViewModel map,
+                                  IDialogService dialogs) : base(dialogs)
     {
+        _map = map;
         _location = location;
         _directions = directions;
         _reports = reports;
@@ -161,6 +164,17 @@ public partial class ReportDetailsViewModel : BaseViewModel, IQueryAttributable
         var text = $"🐾 {Report.Title} ({Report.AnimalType}) needs help: {Needs.CardLabel(Report.Condition, Report.Status)}.\n" +
                    $"📍 {Report.Location.Address ?? "See map"}\n{mapLink}\nReported on Paw Rescue.";
         await Share.Default.RequestAsync(new ShareTextRequest { Title = "Share this report", Text = text });
+    }
+
+    /// <summary>Tapping the location card: open the in-app Rescue Map zoomed on this exact report.</summary>
+    [RelayCommand]
+    private async Task ShowOnMapAsync()
+    {
+        if (Report is null) return;
+        var point = new GeoPoint(Report.Location.Latitude, Report.Location.Longitude);
+        var id = Report.Id;
+        await Shell.Current.GoToAsync("//map");
+        await _map.FocusReportAsync(id, point);
     }
 
     [RelayCommand]

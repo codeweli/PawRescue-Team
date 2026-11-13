@@ -98,6 +98,7 @@ public partial class MapPage : BasePage
 
         RedrawPins();
         RedrawMe();
+        MoveCamera(_vm.CurrentCenter, _vm.CurrentRadiusKm);   // applied once the map has a size
     }
 
     /// <summary>Blue dot at the phone's position.</summary>

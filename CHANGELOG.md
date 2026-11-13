@@ -1,5 +1,10 @@
 # Changelog
 
+## Status bar overlap, "show on map", safer directions (Nov 13, 2026)
+- **Fixed:** Home (and the other tab pages) no longer draw under the phone's status bar on Android 15+ (edge-to-edge). See `Views/BasePage.cs`.
+- **Animal Details → tap the Location card** opens the in-app Rescue Map zoomed on that exact report with its preview card.
+- **Directions** when your location is unknown/outside the Philippines now shows the exact pin in Google Maps instead of routing from the phone's own (possibly wrong) location.
+
 ## Sample data moved to San Pablo City, Laguna (Nov 13, 2026)
 - All 9 demo reports are now in **San Pablo City, Laguna** (cathedral, old city hall, Sampaloc Lake, public market, Brgy. San Marcos).
 - **4 sample cats with real photos** (`wwwroot/samples/`): Kuting, Luna, Bella, Mingming. They're the newest, so they show first.

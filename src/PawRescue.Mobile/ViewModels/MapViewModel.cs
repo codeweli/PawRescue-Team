@@ -136,6 +136,27 @@ public partial class MapViewModel : BaseViewModel
 
     private GeoPoint _center = Philippines.DefaultCenter; // San Pablo City until GPS answers
     private double _radiusKm = 5;
+
+    /// <summary>Where the map should be looking (read by MapPage when it is first created).</summary>
+    public GeoPoint CurrentCenter => _center;
+    public double CurrentRadiusKm => _radiusKm;
+
+    /// <summary>
+    /// "Show on map" from Animal Details: zoom to that report and open its preview card.
+    /// </summary>
+    public async Task FocusReportAsync(Guid reportId, GeoPoint point)
+    {
+        _started = true;                 // don't let the first-open GPS logic move the map away
+        SearchText = string.Empty;
+        SelectedStatusFilter = "All";    // so rescued/closed reports are found too
+        _center = point;
+        _radiusKm = 1;
+        CenterRequested?.Invoke(point, _radiusKm);
+
+        IsBusy = false;
+        await LoadAsync();
+        SelectedPin = Pins.FirstOrDefault(p => p.ReportId == reportId);
+    }
     private bool _started;
 
     public override async Task OnAppearingAsync()

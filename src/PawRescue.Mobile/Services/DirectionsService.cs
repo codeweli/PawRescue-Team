@@ -61,9 +61,13 @@ public class DirectionsService : IDirectionsService
     {
         // Google Maps "directions" URL: free, no API key. Uses EXACT coordinates (never the animal's name,
         // which Google would search as a place — e.g. "Luna" is also a town in La Union).
-        var url = $"https://www.google.com/maps/dir/?api=1&destination={F(to.Latitude)},{F(to.Longitude)}&travelmode=driving";
-        if (from is not null)
-            url += $"&origin={F(from.Latitude)},{F(from.Longitude)}";
+        // If we know where you are (inside the Philippines) → route from there.
+        // If not → just show the exact pin, instead of letting Google route from the phone's own
+        // (possibly wrong, e.g. emulator = California) location.
+        var url = from is not null
+            ? $"https://www.google.com/maps/dir/?api=1&origin={F(from.Latitude)},{F(from.Longitude)}" +
+              $"&destination={F(to.Latitude)},{F(to.Longitude)}&travelmode=driving"
+            : $"https://www.google.com/maps/search/?api=1&query={F(to.Latitude)},{F(to.Longitude)}";
 
         await Launcher.Default.OpenAsync(new Uri(url));
     }

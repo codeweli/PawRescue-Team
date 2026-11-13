@@ -97,8 +97,12 @@ public static class SampleDataSeeder
                 ".webp" => "image/webp",
                 _ => "image/jpeg"
             };
-            report.AddImage(new ReportImage(report.Id, $"{publicBaseUrl.TrimEnd('/')}/samples/{fileName}",
-                                            $"samples/{fileName}", contentType, new FileInfo(file).Length, true));
+            var image = new ReportImage(report.Id, $"{publicBaseUrl.TrimEnd('/')}/samples/{fileName}",
+                            $"samples/{fileName}", contentType, new FileInfo(file).Length, true);
+            report.AddImage(image);
+            // The image already has an Id (Guid), so EF would think it's an EXISTING row and try an UPDATE.
+            // Mark it as new explicitly so EF does an INSERT.
+            db.Images.Add(image);   
             added++;
         }
 
