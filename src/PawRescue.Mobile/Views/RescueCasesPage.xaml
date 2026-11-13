@@ -58,7 +58,7 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <Border x:Name="ChipBorder" Style="{StaticResource Chip}">
-                            <Label x:Name="ChipLabel" Text="{Binding .}" FontSize="14" FontAttributes="Bold"
+                            <Label x:Name="ChipLabel" Text="{Binding .}" FontSize="14" FontFamily="NunitoBold"
                                    TextColor="{StaticResource TextPrimary}" />
                         </Border>
                     </Grid>

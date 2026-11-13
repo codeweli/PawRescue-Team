@@ -28,7 +28,7 @@
                                         <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
                                     </DataTrigger>
                                 </Border.Triggers>
-                                <Label Text="{Binding BadgeText}" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}">
+                                <Label Text="{Binding BadgeText}" FontSize="11" FontFamily="NunitoBold" TextColor="{StaticResource TextPrimary}">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding IsHighPriority}" Value="True">
                                             <Setter Property="TextColor" Value="White" />

@@ -21,11 +21,11 @@
                 <Grid ColumnDefinitions="36,*" ColumnSpacing="12">
                     <Border WidthRequest="32" HeightRequest="32" StrokeShape="RoundRectangle 16" StrokeThickness="0"
                             BackgroundColor="{StaticResource PrimaryLight}" VerticalOptions="Start">
-                        <Label Text="1" FontAttributes="Bold" TextColor="{StaticResource Primary}"
+                        <Label Text="1" FontFamily="NunitoBold" TextColor="{StaticResource Primary}"
                                HorizontalOptions="Center" VerticalOptions="Center" />
                     </Border>
                     <VerticalStackLayout Grid.Column="1" Spacing="4">
-                        <Label Text="Keep a safe distance" FontAttributes="Bold" FontSize="15" />
+                        <Label Text="Keep a safe distance" FontFamily="NunitoBold" FontSize="15" />
                         <Label Text="Scared, hurt or hungry animals can bite or scratch. Approach slowly from the side, speak softly, and never corner them." FontSize="14" TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
                 </Grid>
@@ -34,11 +34,11 @@
                 <Grid ColumnDefinitions="36,*" ColumnSpacing="12">
                     <Border WidthRequest="32" HeightRequest="32" StrokeShape="RoundRectangle 16" StrokeThickness="0"
                             BackgroundColor="{StaticResource PrimaryLight}" VerticalOptions="Start">
-                        <Label Text="2" FontAttributes="Bold" TextColor="{StaticResource Primary}"
+                        <Label Text="2" FontFamily="NunitoBold" TextColor="{StaticResource Primary}"
                                HorizontalOptions="Center" VerticalOptions="Center" />
                     </Border>
                     <VerticalStackLayout Grid.Column="1" Spacing="4">
-                        <Label Text="Don't touch injured animals bare-handed" FontAttributes="Bold" FontSize="15" />
+                        <Label Text="Don't touch injured animals bare-handed" FontFamily="NunitoBold" FontSize="15" />
                         <Label Text="Use a towel, blanket or thick gloves. Support the body and avoid moving the head and neck if you suspect a spine injury." FontSize="14" TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
                 </Grid>
@@ -47,11 +47,11 @@
                 <Grid ColumnDefinitions="36,*" ColumnSpacing="12">
                     <Border WidthRequest="32" HeightRequest="32" StrokeShape="RoundRectangle 16" StrokeThickness="0"
                             BackgroundColor="{StaticResource PrimaryLight}" VerticalOptions="Start">
-                        <Label Text="3" FontAttributes="Bold" TextColor="{StaticResource Primary}"
+                        <Label Text="3" FontFamily="NunitoBold" TextColor="{StaticResource Primary}"
                                HorizontalOptions="Center" VerticalOptions="Center" />
                     </Border>
                     <VerticalStackLayout Grid.Column="1" Spacing="4">
-                        <Label Text="Watch for signs of rabies" FontAttributes="Bold" FontSize="15" />
+                        <Label Text="Watch for signs of rabies" FontFamily="NunitoBold" FontSize="15" />
                         <Label Text="Drooling, unusual aggression, staggering or fear of water are warning signs. Do not approach — report it and contact your local veterinary or barangay office." FontSize="14" TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
                 </Grid>
@@ -60,11 +60,11 @@
                 <Grid ColumnDefinitions="36,*" ColumnSpacing="12">
                     <Border WidthRequest="32" HeightRequest="32" StrokeShape="RoundRectangle 16" StrokeThickness="0"
                             BackgroundColor="{StaticResource PrimaryLight}" VerticalOptions="Start">
-                        <Label Text="4" FontAttributes="Bold" TextColor="{StaticResource Primary}"
+                        <Label Text="4" FontFamily="NunitoBold" TextColor="{StaticResource Primary}"
                                HorizontalOptions="Center" VerticalOptions="Center" />
                     </Border>
                     <VerticalStackLayout Grid.Column="1" Spacing="4">
-                        <Label Text="Take clear photos first" FontAttributes="Bold" FontSize="15" />
+                        <Label Text="Take clear photos first" FontFamily="NunitoBold" FontSize="15" />
                         <Label Text="Photograph the animal and its surroundings from a safe spot. Good photos help volunteers judge how urgent the case is." FontSize="14" TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
                 </Grid>
@@ -73,11 +73,11 @@
                 <Grid ColumnDefinitions="36,*" ColumnSpacing="12">
                     <Border WidthRequest="32" HeightRequest="32" StrokeShape="RoundRectangle 16" StrokeThickness="0"
                             BackgroundColor="{StaticResource PrimaryLight}" VerticalOptions="Start">
-                        <Label Text="5" FontAttributes="Bold" TextColor="{StaticResource Primary}"
+                        <Label Text="5" FontFamily="NunitoBold" TextColor="{StaticResource Primary}"
                                HorizontalOptions="Center" VerticalOptions="Center" />
                     </Border>
                     <VerticalStackLayout Grid.Column="1" Spacing="4">
-                        <Label Text="Pin the exact location" FontAttributes="Bold" FontSize="15" />
+                        <Label Text="Pin the exact location" FontFamily="NunitoBold" FontSize="15" />
                         <Label Text="Stay near the spot when you report so GPS is accurate, and add a landmark in the notes (store name, street corner)." FontSize="14" TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
                 </Grid>
@@ -86,11 +86,11 @@
                 <Grid ColumnDefinitions="36,*" ColumnSpacing="12">
                     <Border WidthRequest="32" HeightRequest="32" StrokeShape="RoundRectangle 16" StrokeThickness="0"
                             BackgroundColor="{StaticResource PrimaryLight}" VerticalOptions="Start">
-                        <Label Text="6" FontAttributes="Bold" TextColor="{StaticResource Primary}"
+                        <Label Text="6" FontFamily="NunitoBold" TextColor="{StaticResource Primary}"
                                HorizontalOptions="Center" VerticalOptions="Center" />
                     </Border>
                     <VerticalStackLayout Grid.Column="1" Spacing="4">
-                        <Label Text="Offer water before food" FontAttributes="Bold" FontSize="15" />
+                        <Label Text="Offer water before food" FontFamily="NunitoBold" FontSize="15" />
                         <Label Text="A small bowl of clean water is the safest help. Avoid chocolate, onions, grapes, cooked bones and very salty or spicy leftovers." FontSize="14" TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
                 </Grid>
@@ -99,11 +99,11 @@
                 <Grid ColumnDefinitions="36,*" ColumnSpacing="12">
                     <Border WidthRequest="32" HeightRequest="32" StrokeShape="RoundRectangle 16" StrokeThickness="0"
                             BackgroundColor="{StaticResource PrimaryLight}" VerticalOptions="Start">
-                        <Label Text="7" FontAttributes="Bold" TextColor="{StaticResource Primary}"
+                        <Label Text="7" FontFamily="NunitoBold" TextColor="{StaticResource Primary}"
                                HorizontalOptions="Center" VerticalOptions="Center" />
                     </Border>
                     <VerticalStackLayout Grid.Column="1" Spacing="4">
-                        <Label Text="Keep the animal calm and shaded" FontAttributes="Bold" FontSize="15" />
+                        <Label Text="Keep the animal calm and shaded" FontFamily="NunitoBold" FontSize="15" />
                         <Label Text="Move people and noise away. Shade and quiet reduce stress while you wait for a rescuer." FontSize="14" TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
                 </Grid>
@@ -112,11 +112,11 @@
                 <Grid ColumnDefinitions="36,*" ColumnSpacing="12">
                     <Border WidthRequest="32" HeightRequest="32" StrokeShape="RoundRectangle 16" StrokeThickness="0"
                             BackgroundColor="{StaticResource PrimaryLight}" VerticalOptions="Start">
-                        <Label Text="8" FontAttributes="Bold" TextColor="{StaticResource Primary}"
+                        <Label Text="8" FontFamily="NunitoBold" TextColor="{StaticResource Primary}"
                                HorizontalOptions="Center" VerticalOptions="Center" />
                     </Border>
                     <VerticalStackLayout Grid.Column="1" Spacing="4">
-                        <Label Text="Never chase a frightened animal" FontAttributes="Bold" FontSize="15" />
+                        <Label Text="Never chase a frightened animal" FontFamily="NunitoBold" FontSize="15" />
                         <Label Text="Chasing pushes it into traffic. Note where it goes and update your report instead." FontSize="14" TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
                 </Grid>
@@ -125,11 +125,11 @@
                 <Grid ColumnDefinitions="36,*" ColumnSpacing="12">
                     <Border WidthRequest="32" HeightRequest="32" StrokeShape="RoundRectangle 16" StrokeThickness="0"
                             BackgroundColor="{StaticResource PrimaryLight}" VerticalOptions="Start">
-                        <Label Text="9" FontAttributes="Bold" TextColor="{StaticResource Primary}"
+                        <Label Text="9" FontFamily="NunitoBold" TextColor="{StaticResource Primary}"
                                HorizontalOptions="Center" VerticalOptions="Center" />
                     </Border>
                     <VerticalStackLayout Grid.Column="1" Spacing="4">
-                        <Label Text="Look after yourself" FontAttributes="Bold" FontSize="15" />
+                        <Label Text="Look after yourself" FontFamily="NunitoBold" FontSize="15" />
                         <Label Text="If you are bitten or scratched, wash the wound with soap and running water for 15 minutes and see a doctor or animal bite center right away." FontSize="14" TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
                 </Grid>

@@ -72,7 +72,7 @@
             <Border Style="{StaticResource Card}" Padding="0">
                 <VerticalStackLayout Spacing="0">
                         <Grid ColumnDefinitions="*,Auto" Padding="16,16" BackgroundColor="White">
-                            <Label Text="My reports" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                            <Label Text="My reports" FontFamily="NunitoBold" FontSize="15" VerticalOptions="Center" />
                             <Image Grid.Column="1" Source="icon_chevron.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding OpenMyReportsCommand}" />
@@ -80,7 +80,7 @@
                         </Grid>
                         <BoxView Style="{StaticResource Divider}" Margin="16,0" />
                         <Grid ColumnDefinitions="*,Auto" Padding="16,16" BackgroundColor="White">
-                            <Label Text="Edit profile" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                            <Label Text="Edit profile" FontFamily="NunitoBold" FontSize="15" VerticalOptions="Center" />
                             <Image Grid.Column="1" Source="icon_chevron.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding StartEditCommand}" />
@@ -88,7 +88,7 @@
                         </Grid>
                         <BoxView Style="{StaticResource Divider}" Margin="16,0" />
                         <Grid ColumnDefinitions="*,Auto" Padding="16,16" BackgroundColor="White">
-                            <Label Text="Notification settings" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                            <Label Text="Notification settings" FontFamily="NunitoBold" FontSize="15" VerticalOptions="Center" />
                             <Image Grid.Column="1" Source="icon_chevron.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding OpenNotificationSettingsCommand}" />
@@ -96,7 +96,7 @@
                         </Grid>
                         <BoxView Style="{StaticResource Divider}" Margin="16,0" />
                         <Grid ColumnDefinitions="*,Auto" Padding="16,16" BackgroundColor="White">
-                            <Label Text="Help and safety tips" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                            <Label Text="Help and safety tips" FontFamily="NunitoBold" FontSize="15" VerticalOptions="Center" />
                             <Image Grid.Column="1" Source="icon_chevron.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding OpenSafetyTipsCommand}" />
@@ -104,7 +104,7 @@
                         </Grid>
                         <BoxView Style="{StaticResource Divider}" Margin="16,0"  IsVisible="{Binding IsVolunteer}" />
                         <Grid ColumnDefinitions="*,Auto" Padding="16,16" BackgroundColor="White" IsVisible="{Binding IsVolunteer}">
-                            <Label Text="Volunteer dashboard" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                            <Label Text="Volunteer dashboard" FontFamily="NunitoBold" FontSize="15" VerticalOptions="Center" />
                             <Image Grid.Column="1" Source="icon_chevron.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding OpenVolunteerDashboardCommand}" />
@@ -112,7 +112,7 @@
                         </Grid>
                         <BoxView Style="{StaticResource Divider}" Margin="16,0"  IsVisible="{Binding IsAdmin}" />
                         <Grid ColumnDefinitions="*,Auto" Padding="16,16" BackgroundColor="White" IsVisible="{Binding IsAdmin}">
-                            <Label Text="Admin dashboard" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                            <Label Text="Admin dashboard" FontFamily="NunitoBold" FontSize="15" VerticalOptions="Center" />
                             <Image Grid.Column="1" Source="icon_chevron.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding OpenAdminDashboardCommand}" />

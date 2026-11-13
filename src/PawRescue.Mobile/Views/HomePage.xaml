@@ -53,7 +53,7 @@
                         <Border Style="{StaticResource ActionTile}" BackgroundColor="{StaticResource Primary}">
                             <Grid RowDefinitions="*,Auto">
                                 <Image Source="icon_plus_white.png" WidthRequest="22" HeightRequest="22" HorizontalOptions="Start" VerticalOptions="Start" />
-                                <Label Grid.Row="1" Text="Report&#10;Animal" TextColor="White" FontAttributes="Bold" FontSize="14" />
+                                <Label Grid.Row="1" Text="Report&#10;Animal" TextColor="White" FontFamily="NunitoBold" FontSize="14" />
                             </Grid>
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding ReportAnimalCommand}" />
@@ -62,7 +62,7 @@
                         <Border Grid.Column="1" Style="{StaticResource ActionTile}">
                             <Grid RowDefinitions="*,Auto">
                                 <Image Source="icon_map_red.png" WidthRequest="22" HeightRequest="22" HorizontalOptions="Start" VerticalOptions="Start" />
-                                <Label Grid.Row="1" Text="View Map" TextColor="{StaticResource PrimaryDark}" FontAttributes="Bold" FontSize="14" />
+                                <Label Grid.Row="1" Text="View Map" TextColor="{StaticResource PrimaryDark}" FontFamily="NunitoBold" FontSize="14" />
                             </Grid>
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding OpenMapCommand}" />
@@ -71,7 +71,7 @@
                         <Border Grid.Column="2" Style="{StaticResource ActionTile}">
                             <Grid RowDefinitions="*,Auto">
                                 <Image Source="icon_list_red.png" WidthRequest="22" HeightRequest="22" HorizontalOptions="Start" VerticalOptions="Start" />
-                                <Label Grid.Row="1" Text="Rescue Cases" TextColor="{StaticResource PrimaryDark}" FontAttributes="Bold" FontSize="14" />
+                                <Label Grid.Row="1" Text="Rescue Cases" TextColor="{StaticResource PrimaryDark}" FontFamily="NunitoBold" FontSize="14" />
                             </Grid>
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding OpenCasesCommand}" />

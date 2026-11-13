@@ -1,5 +1,12 @@
 # Changelog
 
+## Friendlier look, new Animal Details, photo-only samples (Nov 13, 2026)
+- **Font:** the whole app now uses **Nunito**, a soft rounded font (free, SIL Open Font License, `Resources/Fonts/`). Headings keep the serif style.
+- **Animal Details redesigned:** big photo, rounded white card, soft pills (need · urgency · status), quick-facts tiles, "About this animal", a location card with **View on map** + **Directions**, rescuer card, and a checkmark progress timeline.
+- **Accept Rescue** now opens a friendly bottom sheet ("Help Luna?" / "Yes, I'll help" / "Not now") instead of the plain Android dialog.
+- **Removed** the "AI health check (beta)" button (the API endpoint stays as a documented future feature).
+- **Sample data:** 8 animals, **all with photos** (4 cats + 4 dogs) in San Pablo City. A sample is only created if its photo exists. Old or picture-less demo reports are removed automatically on API start.
+
 ## Status bar overlap, "show on map", safer directions (Nov 13, 2026)
 - **Fixed:** Home (and the other tab pages) no longer draw under the phone's status bar on Android 15+ (edge-to-edge). See `Views/BasePage.cs`.
 - **Animal Details → tap the Location card** opens the in-app Rescue Map zoomed on that exact report with its preview card.

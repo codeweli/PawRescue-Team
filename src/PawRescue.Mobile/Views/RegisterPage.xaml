@@ -41,7 +41,7 @@
             <Border Style="{StaticResource Card}" Margin="0,14,0,0">
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout>
-                        <Label Text="I want to volunteer" FontAttributes="Bold" />
+                        <Label Text="I want to volunteer" FontFamily="NunitoBold" />
                         <Label Text="Volunteers can accept rescue cases near them." Style="{StaticResource Caption}" />
                     </VerticalStackLayout>
                     <Switch Grid.Column="1" IsToggled="{Binding RegisterAsVolunteer}" OnColor="{StaticResource Primary}"

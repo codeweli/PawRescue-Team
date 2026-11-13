@@ -30,7 +30,7 @@
                                     <Image Source="{Binding IconImage}" WidthRequest="20" HeightRequest="20" />
                                 </Border>
                                 <VerticalStackLayout Grid.Column="1" Spacing="3">
-                                    <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="15" />
+                                    <Label Text="{Binding Title}" FontFamily="NunitoBold" FontSize="15" />
                                     <Label Text="{Binding Message}" FontSize="14" TextColor="{StaticResource TextSecondary}" />
                                     <Label Text="{Binding TimeAgo}" FontSize="12" TextColor="{StaticResource TextSecondary}" Margin="0,2,0,0" />
                                 </VerticalStackLayout>

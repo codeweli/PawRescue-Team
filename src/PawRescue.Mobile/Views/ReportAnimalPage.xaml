@@ -22,7 +22,7 @@
                             StrokeDashArray="4,3" BackgroundColor="{StaticResource PrimaryLight}">
                         <VerticalStackLayout VerticalOptions="Center" Spacing="2">
                             <Label Text="📷" FontSize="28" HorizontalOptions="Center" />
-                            <Label Text="Take Photo" FontAttributes="Bold" TextColor="{StaticResource Primary}" HorizontalOptions="Center" />
+                            <Label Text="Take Photo" FontFamily="NunitoBold" TextColor="{StaticResource Primary}" HorizontalOptions="Center" />
                         </VerticalStackLayout>
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding TakePhotoCommand}" />
@@ -31,7 +31,7 @@
                     <Border Grid.Column="1" Style="{StaticResource Card}" Padding="0" HeightRequest="96">
                         <VerticalStackLayout VerticalOptions="Center" Spacing="2">
                             <Label Text="🖼️" FontSize="28" HorizontalOptions="Center" />
-                            <Label Text="Upload" FontAttributes="Bold" HorizontalOptions="Center" />
+                            <Label Text="Upload" FontFamily="NunitoBold" HorizontalOptions="Center" />
                         </VerticalStackLayout>
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding PickPhotoCommand}" />
@@ -107,7 +107,7 @@
                                         </VisualState>
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
-                                <Label x:Name="ChipLabel" Text="{Binding .}" FontSize="13" FontAttributes="Bold" HorizontalOptions="Center"
+                                <Label x:Name="ChipLabel" Text="{Binding .}" FontSize="13" FontFamily="NunitoBold" HorizontalOptions="Center"
                                        TextColor="{Binding ., Converter={StaticResource SeverityToColor}}" />
                             </Border>
                         </DataTemplate>
@@ -128,7 +128,7 @@
                             <Label Text="📍" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
                         <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                            <Label Text="GPS location" FontAttributes="Bold" />
+                            <Label Text="GPS location" FontFamily="NunitoBold" />
                             <Label Text="{Binding LocationStatus}" Style="{StaticResource Caption}" />
                         </VerticalStackLayout>
                         <Label Grid.Column="2" Text="Refresh" Style="{StaticResource LinkLabel}" VerticalOptions="Center" />

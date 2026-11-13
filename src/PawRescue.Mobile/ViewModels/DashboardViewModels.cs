@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PawRescue.Mobile.Models;
@@ -327,17 +327,29 @@ public partial class AdminDashboardViewModel : BaseViewModel
         _ = Shell.Current.GoToAsync("reportdetails", new Dictionary<string, object> { ["id"] = value.Id });
     }
 
-    // ============================================================
-    // TODO(MEMBER 4): When an admin taps a user in the Users tab:
-    //   1. Show Dialogs.ActionSheetAsync($"{user.FullName} ({user.Role})",
-    //        user.IsActive ? "Deactivate account" : "Activate account",
-    //        "Make User", "Make Volunteer", "Make Administrator");
-    //   2. Depending on the choice call _admin.ChangeRoleAsync(user.Id, Roles.X)
-    //      or _admin.SetActiveAsync(user.Id, !user.IsActive) inside RunAsync(...).
-    //   3. Replace the old item in Users with the returned UserDto so the list updates.
-    // ============================================================
-    private Task ManageUserAsync(UserDto user)
-        => Dialogs.AlertAsync("Not built yet", "User management is assigned to Member 4.");
+    /// <summary>Admin taps a user → choose a new role or activate/deactivate the account.</summary>
+    private async Task ManageUserAsync(UserDto user)
+    {
+        var toggle = user.IsActive ? "Deactivate account" : "Activate account";
+        var choice = await Dialogs.ActionSheetAsync($"{user.FullName} ({user.Role})",
+            toggle, "Make User", "Make Volunteer", "Make Administrator");
+        if (choice is null) return;   // cancelled
+
+        await RunAsync(async () =>
+        {
+            UserDto updated = choice switch
+            {
+                "Make User" => await _admin.ChangeRoleAsync(user.Id, Roles.User),
+                "Make Volunteer" => await _admin.ChangeRoleAsync(user.Id, Roles.Volunteer),
+                "Make Administrator" => await _admin.ChangeRoleAsync(user.Id, Roles.Administrator),
+                _ => await _admin.SetActiveAsync(user.Id, !user.IsActive)
+            };
+
+            // Replace the old row so the list shows the new role / status right away.
+            var index = Users.IndexOf(user);
+            if (index >= 0) Users[index] = updated;
+        });
+    }
 
     private static void Fill<T>(ObservableCollection<T> target, IEnumerable<T> items)
     {

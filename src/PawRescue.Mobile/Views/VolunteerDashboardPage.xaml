@@ -20,19 +20,19 @@
                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
                         <Border Style="{StaticResource StatCard}" BackgroundColor="{StaticResource PrimaryLight}">
                             <VerticalStackLayout HorizontalOptions="Center">
-                                <Label Text="{Binding ActiveCount}" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource PrimaryDark}" HorizontalOptions="Center" />
+                                <Label Text="{Binding ActiveCount}" FontSize="24" FontFamily="NunitoBold" TextColor="{StaticResource PrimaryDark}" HorizontalOptions="Center" />
                                 <Label Text="Active" Style="{StaticResource Caption}" HorizontalOptions="Center" />
                             </VerticalStackLayout>
                         </Border>
                         <Border Grid.Column="1" Style="{StaticResource StatCard}" BackgroundColor="{StaticResource SecondaryLight}">
                             <VerticalStackLayout HorizontalOptions="Center">
-                                <Label Text="{Binding CompletedCount}" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource Secondary}" HorizontalOptions="Center" />
+                                <Label Text="{Binding CompletedCount}" FontSize="24" FontFamily="NunitoBold" TextColor="{StaticResource Secondary}" HorizontalOptions="Center" />
                                 <Label Text="Rescued" Style="{StaticResource Caption}" HorizontalOptions="Center" />
                             </VerticalStackLayout>
                         </Border>
                         <Border Grid.Column="2" Style="{StaticResource StatCard}">
                             <VerticalStackLayout HorizontalOptions="Center">
-                                <Label Text="{Binding AvailableCount}" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+                                <Label Text="{Binding AvailableCount}" FontSize="24" FontFamily="NunitoBold" HorizontalOptions="Center" />
                                 <Label Text="Waiting" Style="{StaticResource Caption}" HorizontalOptions="Center" />
                             </VerticalStackLayout>
                         </Border>
@@ -57,7 +57,7 @@
                                 <Grid Style="{StaticResource NoSelectionHighlight}" Padding="0,4">
                                     <Border Style="{StaticResource Card}" WidthRequest="240" BackgroundColor="{StaticResource Secondary}" Stroke="Transparent">
                                         <VerticalStackLayout Spacing="4">
-                                            <Label Text="{Binding ReportTitle}" TextColor="White" FontAttributes="Bold" MaxLines="1" LineBreakMode="TailTruncation" />
+                                            <Label Text="{Binding ReportTitle}" TextColor="White" FontFamily="NunitoBold" MaxLines="1" LineBreakMode="TailTruncation" />
                                             <Label Text="{Binding AssignedAt, Converter={StaticResource UtcToLocal}, StringFormat='Accepted {0}'}" TextColor="#CCFBF1" FontSize="12" />
                                             <Label Text="Tap to update progress →" TextColor="White" FontSize="12" />
                                         </VerticalStackLayout>

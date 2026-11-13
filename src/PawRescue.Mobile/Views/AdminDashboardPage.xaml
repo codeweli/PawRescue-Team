@@ -31,7 +31,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <Label x:Name="TabLabel" Text="{Binding .}" FontSize="13" FontAttributes="Bold" HorizontalOptions="Center" />
+                        <Label x:Name="TabLabel" Text="{Binding .}" FontSize="13" FontFamily="NunitoBold" HorizontalOptions="Center" />
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
@@ -59,31 +59,31 @@
                     <Border Style="{StaticResource StatCard}">
                         <VerticalStackLayout>
                             <Label Text="Total reports" Style="{StaticResource Caption}" />
-                            <Label Text="{Binding Stats.TotalReports}" FontSize="26" FontAttributes="Bold" />
+                            <Label Text="{Binding Stats.TotalReports}" FontSize="26" FontFamily="NunitoBold" />
                         </VerticalStackLayout>
                     </Border>
                     <Border Grid.Column="1" Style="{StaticResource StatCard}">
                         <VerticalStackLayout>
                             <Label Text="Open cases" Style="{StaticResource Caption}" />
-                            <Label Text="{Binding Stats.OpenReports}" FontSize="26" FontAttributes="Bold" TextColor="{StaticResource StatusInProgress}" />
+                            <Label Text="{Binding Stats.OpenReports}" FontSize="26" FontFamily="NunitoBold" TextColor="{StaticResource StatusInProgress}" />
                         </VerticalStackLayout>
                     </Border>
                     <Border Grid.Row="1" Style="{StaticResource StatCard}">
                         <VerticalStackLayout>
                             <Label Text="Rescued" Style="{StaticResource Caption}" />
-                            <Label Text="{Binding Stats.RescuedReports}" FontSize="26" FontAttributes="Bold" TextColor="{StaticResource StatusRescued}" />
+                            <Label Text="{Binding Stats.RescuedReports}" FontSize="26" FontFamily="NunitoBold" TextColor="{StaticResource StatusRescued}" />
                         </VerticalStackLayout>
                     </Border>
                     <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource StatCard}">
                         <VerticalStackLayout>
                             <Label Text="Critical &amp; open" Style="{StaticResource Caption}" />
-                            <Label Text="{Binding Stats.CriticalOpenReports}" FontSize="26" FontAttributes="Bold" TextColor="{StaticResource SeverityCritical}" />
+                            <Label Text="{Binding Stats.CriticalOpenReports}" FontSize="26" FontFamily="NunitoBold" TextColor="{StaticResource SeverityCritical}" />
                         </VerticalStackLayout>
                     </Border>
                     <Border Grid.Row="2" Style="{StaticResource StatCard}">
                         <VerticalStackLayout>
                             <Label Text="Users / Volunteers" Style="{StaticResource Caption}" />
-                            <Label FontSize="22" FontAttributes="Bold">
+                            <Label FontSize="22" FontFamily="NunitoBold">
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="{Binding Stats.TotalUsers}" />
@@ -97,7 +97,7 @@
                     <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource StatCard}">
                         <VerticalStackLayout>
                             <Label Text="Last 7 days" Style="{StaticResource Caption}" />
-                            <Label Text="{Binding Stats.ReportsLast7Days}" FontSize="26" FontAttributes="Bold" />
+                            <Label Text="{Binding Stats.ReportsLast7Days}" FontSize="26" FontFamily="NunitoBold" />
                         </VerticalStackLayout>
                     </Border>
                 </Grid>
@@ -110,7 +110,7 @@
                                 <DataTemplate x:DataType="vm:StatusCount">
                                     <Grid ColumnDefinitions="*,Auto">
                                         <Label Text="{Binding Name}" />
-                                        <Label Grid.Column="1" Text="{Binding Count}" FontAttributes="Bold" />
+                                        <Label Grid.Column="1" Text="{Binding Count}" FontFamily="NunitoBold" />
                                     </Grid>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
@@ -120,7 +120,7 @@
 
                 <Border Style="{StaticResource Card}" BackgroundColor="{StaticResource SurfaceMuted}">
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="📊 Analytics heatmap" FontAttributes="Bold" />
+                        <Label Text="📊 Analytics heatmap" FontFamily="NunitoBold" />
                         <Label Text="Coming in a future version — will show where reports cluster across the city." Style="{StaticResource Caption}" />
                     </VerticalStackLayout>
                 </Border>
@@ -139,7 +139,7 @@
                         <Border Style="{StaticResource Card}" Padding="12">
                             <Grid ColumnDefinitions="*,Auto">
                                 <VerticalStackLayout>
-                                    <Label Text="{Binding FullName}" FontAttributes="Bold" />
+                                    <Label Text="{Binding FullName}" FontFamily="NunitoBold" />
                                     <Label Text="{Binding Email}" Style="{StaticResource Caption}" />
                                 </VerticalStackLayout>
                                 <VerticalStackLayout Grid.Column="1" HorizontalOptions="End" Spacing="4">
@@ -168,7 +168,7 @@
                     <Grid Padding="16,8" ColumnDefinitions="Auto,*" ColumnSpacing="12">
                         <BoxView WidthRequest="4" Color="{StaticResource Primary}" CornerRadius="2" />
                         <VerticalStackLayout Grid.Column="1" Spacing="2">
-                            <Label Text="{Binding Action}" FontAttributes="Bold" FontSize="13" />
+                            <Label Text="{Binding Action}" FontFamily="NunitoBold" FontSize="13" />
                             <Label Style="{StaticResource Caption}">
                                 <Label.FormattedText>
                                     <FormattedString>

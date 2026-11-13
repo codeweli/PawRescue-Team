@@ -44,12 +44,10 @@ public static class DbSeeder
         // Demo reports around the Philippines (only when the database has no reports yet)
         if (seed.SampleData)
         {
-            await SampleDataSeeder.SeedAsync(db, hasher, logger);
-
             var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
             var storage = scope.ServiceProvider.GetRequiredService<IOptions<StorageOptions>>().Value;
             var webRoot = env.WebRootPath ?? Path.Combine(env.ContentRootPath, "wwwroot");
-            await SampleDataSeeder.AttachSamplePhotosAsync(db, webRoot, storage.PublicBaseUrl, logger);
+            await SampleDataSeeder.SeedAsync(db, hasher, webRoot, storage.PublicBaseUrl, logger);
         }
     }
 }
