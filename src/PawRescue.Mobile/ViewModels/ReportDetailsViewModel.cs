@@ -155,14 +155,46 @@ public partial class ReportDetailsViewModel : BaseViewModel, IQueryAttributable
         await Dialogs.AlertAsync("Thank you! 🐾", $"You're now the rescuer for {Report?.Title}. The reporter has been notified.");
     });
 
+    // ----- "Start rescue / Mark as rescued / Close case" sheet -----
+    [ObservableProperty] private bool isStatusSheetVisible;
+    [ObservableProperty] private string statusNote = string.Empty;
+    [ObservableProperty] private string statusSheetHint = string.Empty;
+    public ObservableCollection<string> QuickNotes { get; } = new();
+
+    /// <summary>Main volunteer button → opens the update sheet with ready-made notes for the next step.</summary>
     [RelayCommand]
-    private Task AdvanceStatusAsync() => RunAsync(async () =>
+    private void AdvanceStatus()
     {
         if (Report is null || NextStatus(Report.Status) is not { } next) return;
-        var note = await Dialogs.PromptAsync(NextActionText, "Add a note for the reporter (optional)", "e.g. Brought to the vet");
-        if (note is null) return; // cancelled
 
-        await _rescues.UpdateStatusAsync(_id, next, note);
+        StatusNote = string.Empty;
+        QuickNotes.Clear();
+        var (hint, notes) = next switch
+        {
+            ReportStatus.InProgress => ("Tell the reporter you're starting the rescue.",
+                                        new[] { "On my way 🚗", "Arrived at the location", "Bringing food and water" }),
+            ReportStatus.Rescued => ("Great work! Let the reporter know the animal is safe.",
+                                     new[] { "Brought to the vet 🏥", "Safe with a foster home 🏠", "Back with its owner" }),
+            _ => ("Close this case when nothing more is needed.",
+                  new[] { "Adopted 💛", "Released healthy", "Duplicate report" })
+        };
+        StatusSheetHint = hint;
+        foreach (var n in notes) QuickNotes.Add(n);
+        IsStatusSheetVisible = true;
+    }
+
+    [RelayCommand]
+    private void PickQuickNote(string note) => StatusNote = note;
+
+    [RelayCommand]
+    private void CancelStatus() => IsStatusSheetVisible = false;
+
+    [RelayCommand]
+    private Task ConfirmStatusAsync() => RunAsync(async () =>
+    {
+        if (Report is null || NextStatus(Report.Status) is not { } next) return;
+        IsStatusSheetVisible = false;
+        await _rescues.UpdateStatusAsync(_id, next, string.IsNullOrWhiteSpace(StatusNote) ? null : StatusNote.Trim());
         await LoadCoreAsync();
     });
 

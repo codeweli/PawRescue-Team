@@ -192,6 +192,54 @@
             </Grid>
         </Border>
 
+        <!-- ================= Status update sheet (Start rescue / Mark as rescued / Close case) ================= -->
+        <Grid Grid.RowSpan="2" IsVisible="{Binding IsStatusSheetVisible}">
+            <BoxView Color="#000000" Opacity="0.45">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CancelStatusCommand}" />
+                </BoxView.GestureRecognizers>
+            </BoxView>
+
+            <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 28,28,0,0"
+                    VerticalOptions="End" Padding="24,14,24,24">
+                <VerticalStackLayout Spacing="14">
+                    <BoxView WidthRequest="40" HeightRequest="5" CornerRadius="3" Color="{StaticResource Border}" HorizontalOptions="Center" />
+
+                    <VerticalStackLayout Spacing="4" Margin="0,4,0,0">
+                        <Label Text="{Binding NextActionText}" Style="{StaticResource Title}" FontSize="22" />
+                        <Label Text="{Binding StatusSheetHint}" FontSize="14" TextColor="{StaticResource TextSecondary}" />
+                    </VerticalStackLayout>
+
+                    <!-- Quick notes: tap one to fill the box -->
+                    <FlexLayout BindableLayout.ItemsSource="{Binding QuickNotes}" Wrap="Wrap" JustifyContent="Start">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Border Style="{StaticResource Chip}" BackgroundColor="{StaticResource PrimaryLight}" Margin="0,0,8,8" Padding="14,8">
+                                    <Label Text="{Binding .}" FontFamily="NunitoBold" FontSize="13" TextColor="{StaticResource PrimaryDark}" />
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding PickQuickNoteCommand, Source={RelativeSource AncestorType={x:Type vm:ReportDetailsViewModel}}}"
+                                                              CommandParameter="{Binding .}" />
+                                    </Border.GestureRecognizers>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Note for the reporter (optional)" Style="{StaticResource FieldLabel}" Margin="2,0,0,0" />
+                        <Border Style="{StaticResource InputBorder}" Padding="12,4">
+                            <Editor Text="{Binding StatusNote}" Placeholder="e.g. Brought to the vet on Rizal Ave."
+                                    AutoSize="TextChanges" MinimumHeightRequest="70" MaxLength="500" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <Button Text="{Binding NextActionText}" CornerRadius="16" Command="{Binding ConfirmStatusCommand}" Margin="0,4,0,0" />
+                    <Button Text="Cancel" Style="{StaticResource OutlineButton}" BorderColor="{StaticResource Border}"
+                            TextColor="{StaticResource TextPrimary}" CornerRadius="16" Command="{Binding CancelStatusCommand}" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
         <!-- ================= "Accept this rescue?" sheet ================= -->
         <Grid Grid.RowSpan="2" IsVisible="{Binding IsAcceptSheetVisible}">
             <!-- dim background; tapping it closes the sheet -->
